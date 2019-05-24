@@ -1,21 +1,21 @@
-
 import React, { Component } from "react";
-import Users from './components/Users';
 import axios from 'axios';
 
 
 import {StyleSheet, Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView} from 'react-native';
 import { Button } from 'react-native';
-import LoginScreen from "./components/LogInScreen";
 
 // const appId = "609894231244-0qhicv602n7a56t35n4hmn4ahrd3mi7c.apps.googleusercontent.com"
 
 
-export default class App extends Component {
+export default class LoginScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loggedIn: false,
+            firstName: 'first',
+            lastName: 'last',
+            userName: 'email@email.com',
+            password: 'password',
         }
     }
     componentDidMount() {
@@ -36,43 +36,63 @@ export default class App extends Component {
   render() {
       const {firstName, lastName, userName, password} = this.state
     return (
-        <View style={{ height: 100 }}>
-            {this.state.loggedIn ? <Users /> : <LoginScreen logInUser={this._loginUser} />} 
-       </View>
-       
-    
+      <KeyboardAvoidingView style={styles.containerView} behavior="padding">
+
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.loginScreenContainer}>
+          <View style={styles.loginFormView}>
+          <Text style={styles.logoText}>Chatris</Text>
+          <TextInput placeholder="First Name" 
+                     placeholderColor="#c4c3cb"   
+                     style={styles.loginFormTextInput}
+                     onChangeText={(firstName) => this.setState({firstName})}
+                     value={firstName}
+                      />
+          <TextInput placeholder="Last Name" 
+                     placeholderColor="#c4c3cb" 
+                     style={styles.loginFormTextInput} 
+                     onChangeText={(lastName) => this.setState({lastName})}
+                     value={lastName}
+                     />
+          <TextInput placeholder="Username" 
+                     placeholderColor="#c4c3cb"   
+                     style={styles.loginFormTextInput}
+                     onChangeText={(userName) => this.setState({userName})}
+                     value={userName}
+                      />
+          <TextInput placeholder="Password" 
+                     placeholderColor="#c4c3cb" 
+                     style={styles.loginFormTextInput} 
+                     secureTextEntry={true}
+                     onChangeText={(password) => this.setState({password})}
+                     value={password}
+                     />
+            <Button
+              buttonStyle={styles.loginButton}
+              onPress={() => this.props.logInUser(this.state.firstName, 
+                                             this.state.lastName, 
+                                             this.state.userName, 
+                                             this.state.password)}
+              title="Login"
+            />
+             
+            <Button
+              buttonStyle={styles.fbLoginButton}
+              title="Login with Facebook"
+              color="#3897f1"
+            />
+            
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
   }
 
 
   
 
-  _loginUser = async (firstName, lastName, userName, password) => {
-//     console.log(`User: ${userName} Password: ${password}`);
-//     this.connection.send(JSON.stringify({
-//         firstName,
-//         lastName,
-//         userName,
-//         password,
-//     }));
-//   }
-    let data = await axios.post('http://localhost:31337/login',  {
-            firstName,
-            lastName,
-            userName,
-            password,
-        }
-    )
 
-    console.log(data)
-    console.log(data.data)
-    if(data.data){
-
-        this.setState({
-            loggedIn: true,
-        })
-    }
-  }
 
 //   async onFbLoginPress() {
 //     try {
