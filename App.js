@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import Users from './components/Users';
 import axios from 'axios';
+import Tetris from './components/Tetris';
 
 
 import {StyleSheet, Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView} from 'react-native';
@@ -37,7 +38,8 @@ export default class App extends Component {
       const {firstName, lastName, userName, password} = this.state
     return (
         <View style={{ height: 100 }}>
-            {this.state.loggedIn ? <Users /> : <LoginScreen logInUser={this._loginUser} />} 
+            {this.state.loggedIn ? <Users /> : <LoginScreen logInUser={this._loginUser} />}
+            <Tetris /> 
        </View>
        
     
