@@ -1,55 +1,199 @@
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-import {
-  OTSession,
-  OTPublisher,
-  OTSubscriber,
-} from 'opentok-react-native';
-// require('dotenv').config();
+import React, { Component } from "react";
+import Users from './components/Users';
+import axios from 'axios';
 
 
+import {StyleSheet, Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView} from 'react-native';
+import { Button } from 'react-native';
 
-type Props = {};
-export default class App extends Component<Props> {
-  constructor(props) {
-    super(props);
-    this.state = {
+// const appId = "609894231244-0qhicv602n7a56t35n4hmn4ahrd3mi7c.apps.googleusercontent.com"
 
+
+export default class LoginScreen extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            firstName: 'first',
+            lastName: 'last',
+            userName: 'email@email.com',
+            password: 'password',
+            loggedIn: false,
+        }
     }
-    // this.key = process.env.API_KEY;
-    // this.id = process.env.SESSION_ID; 
-    // this.token = process.env.TOKEN; 
-   
-    this.key = '46334622';
-    this.id = '1_MX40NjMzNDYyMn5-MTU1ODcwMzQ2MDYzN35mVHBSOGQ4S0xBVEhQTEZ2Q0Rhdm9tRjl-fg';
-    this.token = 'T1==cGFydG5lcl9pZD00NjMzNDYyMiZzaWc9MmM1NjU5Njg3NDI5ZGQ2ZWFiMzc2OGUxY2NlZmU2NWEzYmNlNWNiZjpzZXNzaW9uX2lkPTFfTVg0ME5qTXpORFl5TW41LU1UVTFPRGN3TXpRMk1EWXpOMzVtVkhCU09HUTRTMHhCVkVoUVRFWjJRMFJoZG05dFJqbC1mZyZjcmVhdGVfdGltZT0xNTU4NzAzNDk1Jm5vbmNlPTAuMDQzMzA4NzIxNjc5OTA0ODUmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTU1ODc4OTg5NCZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==';
-  }
+    componentDidMount() {
+    //   const url = 'ws://localhost:31337/chat'; 
+    //   this.connection = new WebSocket(url);
+    //   this.connection.onmessage = (e) => {
+    //     let data = JSON.parse(e.data);
+    //     data ? loggedIn : null;
+    //     this.setState({
+    //       userName: data.userName,
+    //       password: data.password,
+    //       firstName: data.firstName,
+    //       lastName:data.lastName
+    //     });
+    //   }
+    }
+
   render() {
+      const {firstName, lastName, userName, password} = this.state
     return (
-      <View style={styles.container}>
-        <OTSession apiKey={this.key} sessionId={this.id} token={this.token} />
-        <OTPublisher style={{ width: 100, height: 100 }} properties={{ publishAudio: false }}/>
-        <OTSubscriber style={{ width: 100, height: 100 }} />
-      </View>
+      <KeyboardAvoidingView style={styles.containerView} behavior="padding">
+
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.loginScreenContainer}>
+          <View style={styles.loginFormView}>
+          <Text style={styles.logoText}>Chatris</Text>
+          <TextInput placeholder="First Name" 
+                     placeholderColor="#c4c3cb"   
+                     style={styles.loginFormTextInput}
+                     onChangeText={(firstName) => this.setState({firstName})}
+                     value={firstName}
+                      />
+          <TextInput placeholder="Last Name" 
+                     placeholderColor="#c4c3cb" 
+                     style={styles.loginFormTextInput} 
+                     onChangeText={(lastName) => this.setState({lastName})}
+                     value={lastName}
+                     />
+          <TextInput placeholder="Username" 
+                     placeholderColor="#c4c3cb"   
+                     style={styles.loginFormTextInput}
+                     onChangeText={(userName) => this.setState({userName})}
+                     value={userName}
+                      />
+          <TextInput placeholder="Password" 
+                     placeholderColor="#c4c3cb" 
+                     style={styles.loginFormTextInput} 
+                     secureTextEntry={true}
+                     onChangeText={(password) => this.setState({password})}
+                     value={password}
+                     />
+            <Button
+              buttonStyle={styles.loginButton}
+              onPress={() => this._loginUser(this.state.firstName, 
+                                             this.state.lastName, 
+                                             this.state.userName, 
+                                             this.state.password)}
+              title="Login"
+            />
+             {this.state.loggedIn ? <Users /> : null}
+            <Button
+              buttonStyle={styles.fbLoginButton}
+              title="Login with Facebook"
+              color="#3897f1"
+            />
+            {this.state.signedIn ? <Text>{this.state.name}</Text> : null}
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
   }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+
+  
+
+  _loginUser = async (firstName, lastName, userName, password) => {
+//     console.log(`User: ${userName} Password: ${password}`);
+//     this.connection.send(JSON.stringify({
+//         firstName,
+//         lastName,
+//         userName,
+//         password,
+//     }));
+//   }
+    let data = await axios.post('http://localhost:31337/login',  {
+            firstName,
+            lastName,
+            userName,
+            password,
+        }
+    )
+    console.log(JSON.stringify(data))
+    this.setState({
+        loggedIn: true,
+    })
+  }
+
+//   async onFbLoginPress() {
+//     try {
+//         const result = await Google.logInAsync({clientId:appId})
+  
+//         if (result.type === "success") {
+//             console.log(result.user)
+//           this.setState({
+//             signedIn: true,
+//             name: result.user.name,
+//             photoUrl: result.user.photoUrl
+//           })
+//         } else {
+//           console.log("cancelled")
+//         }
+//       } catch (e) {
+//         console.log("error", e)
+//       }
+//     }
+//       console.log("FACEBOOK LOGIN")
+//     const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(appId, {
+//       permissions: ['public_profile', 'email'],
+//     });
+//     console.log(type)
+//     console.log(token)
+//     console.log("HEY")
+//     if (type === 'success') {
+//       const response = await fetch(
+//         `https://graph.facebook.com/me?access_token=${token}`);
+//       Alert.alert(
+//         'Logged in!',
+//         `Hi ${(await response.json()).name}!`,
+//       );
+//     }
+//   }
+}
+  const styles = StyleSheet.create({
+    containerView: {
+      flex: 1,
+    },
+    loginScreenContainer: {
+      flex: 1,
+      paddingBottom: 30,
+    },
+    logoText: {
+      fontSize: 40,
+      fontWeight: "800",
+      marginTop: 150,
+      marginBottom: 30,
+      textAlign: 'center',
+    },
+    loginFormView: {
+      flex: 1
+    },
+    loginFormTextInput: {
+      height: 43,
+      fontSize: 14,
+      borderRadius: 5,
+      borderWidth: 1,
+      borderColor: '#eaeaea',
+      backgroundColor: '#fafafa',
+      paddingLeft: 10,
+      marginLeft: 15,
+      marginRight: 15,
+      marginTop: 5,
+      marginBottom: 5,
+    
+    },
+    loginButton: {
+      backgroundColor: '#3897f1',
+      borderRadius: 5,
+      height: 45,
+      marginTop: 10,
+    },
+    fbLoginButton: {
+      height: 45,
+      marginTop: 10,
+      backgroundColor: 'transparent',
+    },
 });
+  
+    
