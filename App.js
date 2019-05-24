@@ -1,29 +1,35 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
+import {
+  OTSession,
+  OTPublisher,
+  OTSubscriber,
+} from 'opentok-react-native';
+// require('dotenv').config();
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+
 
 type Props = {};
 export default class App extends Component<Props> {
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+    // this.key = process.env.API_KEY;
+    // this.id = process.env.SESSION_ID; 
+    // this.token = process.env.TOKEN; 
+   
+    this.key = '46334622';
+    this.id = '1_MX40NjMzNDYyMn5-MTU1ODcwMzQ2MDYzN35mVHBSOGQ4S0xBVEhQTEZ2Q0Rhdm9tRjl-fg';
+    this.token = 'T1==cGFydG5lcl9pZD00NjMzNDYyMiZzaWc9MmM1NjU5Njg3NDI5ZGQ2ZWFiMzc2OGUxY2NlZmU2NWEzYmNlNWNiZjpzZXNzaW9uX2lkPTFfTVg0ME5qTXpORFl5TW41LU1UVTFPRGN3TXpRMk1EWXpOMzVtVkhCU09HUTRTMHhCVkVoUVRFWjJRMFJoZG05dFJqbC1mZyZjcmVhdGVfdGltZT0xNTU4NzAzNDk1Jm5vbmNlPTAuMDQzMzA4NzIxNjc5OTA0ODUmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTU1ODc4OTg5NCZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==';
+  }
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <OTSession apiKey={this.key} sessionId={this.id} token={this.token} />
+        <OTPublisher style={{ width: 100, height: 100 }} properties={{ publishAudio: false }}/>
+        <OTSubscriber style={{ width: 100, height: 100 }} />
       </View>
     );
   }
