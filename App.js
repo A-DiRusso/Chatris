@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-// import Users from './components/Users';
+import GameLobby from './components/GameLobby';
 // import axios from 'axios';
 
 
@@ -19,6 +19,7 @@ export default class App extends Component {
         super(props);
         this.state = {
             loggedIn: false,
+            userData:null
         }
     }
     componentDidMount() {
@@ -26,17 +27,17 @@ export default class App extends Component {
     }
 
   render() {
-      const {firstName, lastName, userName, password} = this.state
+      const {userData} = this.state
     return (
         <View style={{ height: 100 }}>
-            
-              <Chat />
-       </View>
-       
-       
-       );
+            {this.state.loggedIn ? <GameLobby userData={userData}/> : <LoginScreen logInUser={this._loginUser} />}
+
+      </View>
+    
+      
+      );
       }
-      // {this.state.loggedIn ? <Users /> : <LoginScreen logInUser={this._loginUser} />}
+      
 
 
   
@@ -57,6 +58,7 @@ export default class App extends Component {
 
         this.setState({
             loggedIn: true,
+            userData:data.data
         })
     }
   }
