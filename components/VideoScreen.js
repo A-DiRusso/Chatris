@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   OTSession,
   OTPublisher,
   OTSubscriber,
 } from 'opentok-react-native';
-// require('dotenv').config();
+// import { API_KEY, SESSION_ID, TOKEN } from 'react-native-dotenv';
+// ApiClient.init(API_KEY, SESSION_ID, TOKEN);
 
 
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class VideoScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,8 +21,9 @@ export default class App extends Component<Props> {
     // this.token = process.env.TOKEN; 
    
     this.key = '46334622';
-    this.id = '1_MX40NjMzNDYyMn5-MTU1ODcwMzQ2MDYzN35mVHBSOGQ4S0xBVEhQTEZ2Q0Rhdm9tRjl-fg';
-    this.token = 'T1==cGFydG5lcl9pZD00NjMzNDYyMiZzaWc9MmM1NjU5Njg3NDI5ZGQ2ZWFiMzc2OGUxY2NlZmU2NWEzYmNlNWNiZjpzZXNzaW9uX2lkPTFfTVg0ME5qTXpORFl5TW41LU1UVTFPRGN3TXpRMk1EWXpOMzVtVkhCU09HUTRTMHhCVkVoUVRFWjJRMFJoZG05dFJqbC1mZyZjcmVhdGVfdGltZT0xNTU4NzAzNDk1Jm5vbmNlPTAuMDQzMzA4NzIxNjc5OTA0ODUmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTU1ODc4OTg5NCZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==';
+    this.id = '2_MX40NjMzNDYyMn5-MTU1ODc5ODI0NTgyMX5RZTJqbUhPMjRBMVNjTHRVUXBvaWNUYWp-fg';
+    this.token = 'T1==cGFydG5lcl9pZD00NjMzNDYyMiZzaWc9OTFhMGUyZWRhY2M3YzI4ODJlOTNjMzg4MWEwMTA4MDE1ZDk5YjBjMzpzZXNzaW9uX2lkPTJfTVg0ME5qTXpORFl5TW41LU1UVTFPRGM1T0RJME5UZ3lNWDVSWlRKcWJVaFBNalJCTVZOalRIUlZVWEJ2YVdOVVlXcC1mZyZjcmVhdGVfdGltZT0xNTU4Nzk4MzAzJm5vbmNlPTAuNTExNTA3NjQ1MTgxMjIzOSZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNTU4ODg0NzAyJmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9';
+ 
   }
   render() {
     return (

@@ -1,13 +1,15 @@
 
 import React, { Component } from "react";
-import Users from './components/Users';
-import axios from 'axios';
-import Tetris from './components/Tetris';
+// import Users from './components/Users';
+// import axios from 'axios';
 
 
-import {StyleSheet, Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView} from 'react-native';
-import { Button } from 'react-native';
-import LoginScreen from "./components/LogInScreen";
+
+import { StyleSheet, View } from 'react-native';
+
+// import LoginScreen from "./components/LogInScreen";
+import 
+Chat from "./components/Chat";
 
 // const appId = "609894231244-0qhicv602n7a56t35n4hmn4ahrd3mi7c.apps.googleusercontent.com"
 
@@ -20,44 +22,27 @@ export default class App extends Component {
         }
     }
     componentDidMount() {
-    //   const url = 'ws://localhost:31337/chat'; 
-    //   this.connection = new WebSocket(url);
-    //   this.connection.onmessage = (e) => {
-    //     let data = JSON.parse(e.data);
-    //     data ? loggedIn : null;
-    //     this.setState({
-    //       userName: data.userName,
-    //       password: data.password,
-    //       firstName: data.firstName,
-    //       lastName:data.lastName
-    //     });
-    //   }
+
     }
 
   render() {
       const {firstName, lastName, userName, password} = this.state
     return (
         <View style={{ height: 100 }}>
-            {this.state.loggedIn ? <Users /> : <LoginScreen logInUser={this._loginUser} />}
-            <Tetris /> 
+            
+              <Chat />
        </View>
        
-    
-    );
-  }
+       
+       );
+      }
+      // {this.state.loggedIn ? <Users /> : <LoginScreen logInUser={this._loginUser} />}
 
 
   
 
   _loginUser = async (firstName, lastName, userName, password) => {
-//     console.log(`User: ${userName} Password: ${password}`);
-//     this.connection.send(JSON.stringify({
-//         firstName,
-//         lastName,
-//         userName,
-//         password,
-//     }));
-//   }
+
     let data = await axios.post('http://localhost:31337/login',  {
             firstName,
             lastName,
