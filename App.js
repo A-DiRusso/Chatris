@@ -8,7 +8,8 @@ import React, { Component } from "react";
 import { StyleSheet, View } from 'react-native';
 
 // import LoginScreen from "./components/LogInScreen";
-import VideoScreen from "./components/VideoScreen";
+import 
+Chat from "./components/Chat";
 
 // const appId = "609894231244-0qhicv602n7a56t35n4hmn4ahrd3mi7c.apps.googleusercontent.com"
 
@@ -28,7 +29,8 @@ export default class App extends Component {
       const {firstName, lastName, userName, password} = this.state
     return (
         <View style={{ height: 100 }}>
-            <VideoScreen />
+            
+              <Chat />
        </View>
        
        
