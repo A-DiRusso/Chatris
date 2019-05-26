@@ -1,15 +1,15 @@
 
 import React, { Component } from "react";
 import GameLobby from './components/GameLobby';
-// import axios from 'axios';
+import axios from 'axios';
+import io from 'socket.io-client';
 
 
 
 import { StyleSheet, View } from 'react-native';
 
-// import LoginScreen from "./components/LogInScreen";
-import 
-Chat from "./components/Chat";
+import LoginScreen from "./components/LogInScreen";
+// import Chat from "./components/Chat";
 
 // const appId = "609894231244-0qhicv602n7a56t35n4hmn4ahrd3mi7c.apps.googleusercontent.com"
 
@@ -44,7 +44,7 @@ export default class App extends Component {
 
   _loginUser = async (firstName, lastName, userName, password) => {
 
-    let data = await axios.post('http://localhost:31337/login',  {
+    let data = await axios.post('http://localhost:3000/login',  {
             firstName,
             lastName,
             userName,
@@ -52,8 +52,6 @@ export default class App extends Component {
         }
     )
 
-    console.log(data)
-    console.log(data.data)
     if(data.data){
 
         this.setState({
