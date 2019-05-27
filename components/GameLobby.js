@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import io from 'socket.io-client'
+import LobbyButton from './LobbyButton'
 
 export default class GameLobby extends Component {
   constructor(props){
@@ -16,10 +17,18 @@ export default class GameLobby extends Component {
 
     this.socket.emit('game lobby' )
 
-    this.socket.on('game lobby', lobbyData =>this.setState({lobbyData}))
+    this.socket.on('game lobby', lobbyData =>this.setState({lobbyData}) )
 
     this.socket.on('session id', data => {
       const {sessionID, token} = data
+
+      this.props.setSessionID(sessionID, token)
+    })
+
+    this.socket.on('create token', data => {
+      const {sessionID, token} = data
+      console.log('session', sessionID)
+      console.log('token', token)
 
       this.props.setSessionID(sessionID, token)
     })
@@ -28,16 +37,25 @@ export default class GameLobby extends Component {
 
   }
   _createGame = ()=>{
-    this.socket.emit('create room', this.props.userData.firstName)
-
-    
-
+    this.socket.emit('create room', this.props.userData)
+  }
+  _enterGame = (sessionID)=>{
+    console.log("CREATING TOKEN")
+    this.socket.emit('create token', sessionID)
   }
   render() {
     return (
       <View style={styles.gameLobby}>
-        <Text>This is the Users Page</Text>
-        <Button onPress={this._createGame} title= 'CREATE GAME'></Button>
+        {this.state.lobbyData ? this.state.lobbyData.map((gameObj, i) =>{
+          console.log(gameObj)
+          return <LobbyButton
+                    key={i} 
+                    sessionID={gameObj.sessionId} 
+                    title={`${gameObj.userName.firstName}'s Game`} 
+                    clickHandler={this._enterGame}
+                  />
+        }) : null}
+        <Button onPress={this._createGame} title='CREATE GAME'></Button>
         
       </View>
     )

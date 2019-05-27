@@ -32,7 +32,6 @@ export default class VideoScreen extends Component {
   }
 
   render() {
-    console.log(this.props.sessionID)
     return (
       <View style={styles.container}>
         <OTSession apiKey={this.key} sessionId={this.sessionID} token={this.props.token} />

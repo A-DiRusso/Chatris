@@ -39,7 +39,7 @@ export class Tetris extends Component {
         let randomFigure = figureTypes[Math.floor(Math.random() * figureTypes.length)]
 
         let currentFigure = Figures.find(eaObj=> eaObj.type === randomFigure)
-        console.log(currentFigure)
+
         let updatedBoard = this.state.board;
         currentFigure.path.forEach((eaArray)=>{
             updatedBoard[eaArray[1]][eaArray[0]] = {...randomFigure, active:'active'}
