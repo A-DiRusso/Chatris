@@ -38,7 +38,7 @@ export default class App extends Component {
     _createView = ()=>{
       const {userData, sessionID, loggedIn, token} = this.state
       if(loggedIn && !sessionID){
-        
+
         return <GameLobby userData={userData} setSessionID={this._setSessionID}/>
       }
 
@@ -80,6 +80,7 @@ export default class App extends Component {
         }
         
     )
+
 
     if(data.data){
 
