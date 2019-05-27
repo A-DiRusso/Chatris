@@ -2,7 +2,11 @@
 import React, { Component } from "react";
 import GameLobby from './components/GameLobby';
 import axios from 'axios';
-import io from 'socket.io-client';
+
+import LoginScreen from './components/LogInScreen'
+import Tetris from './components/Tetris'
+import VideoScreen from './components/VideoScreen'
+
 
 
 
@@ -19,18 +23,40 @@ export default class App extends Component {
         super(props);
         this.state = {
             loggedIn: false,
-            userData:null
+            userData:null,
+            sessionID:null,
+            token:null
         }
     }
     componentDidMount() {
 
+
     }
+    _setSessionID = (sessionID, token)=>{
+      this.setState({sessionID, token})
+    }
+    _createView = ()=>{
+      const {userData, sessionID, loggedIn, token} = this.state
+      if(loggedIn && !sessionID){
+        
+        return <GameLobby userData={userData} setSessionID={this._setSessionID}/>
+      }
+
+      else if (loggedIn === false){ 
+        return <LoginScreen logInUser={this._loginUser}/>
+
+    }else if (loggedIn && sessionID && token){
+      return <Tetris sessionID={sessionID} token={token}/>
+
+      
+    }
+  }
 
   render() {
-      const {userData} = this.state
+      
     return (
-        <View style={{ height: 100 }}>
-            {this.state.loggedIn ? <GameLobby userData={userData}/> : <LoginScreen logInUser={this._loginUser} />}
+        <View style={styles.appView}>
+            {this._createView()}
 
       </View>
     
@@ -44,12 +70,15 @@ export default class App extends Component {
 
   _loginUser = async (firstName, lastName, userName, password) => {
 
-    let data = await axios.post('http://localhost:3000/login',  {
+
+    let data = await axios.post('http://10.150.21.157:3000/login',  {
+
             firstName,
             lastName,
             userName,
             password,
         }
+        
     )
 
     if(data.data){
@@ -97,48 +126,8 @@ export default class App extends Component {
 //   }
 }
   const styles = StyleSheet.create({
-    containerView: {
-      flex: 1,
-    },
-    loginScreenContainer: {
-      flex: 1,
-      paddingBottom: 30,
-    },
-    logoText: {
-      fontSize: 40,
-      fontWeight: "800",
-      marginTop: 150,
-      marginBottom: 30,
-      textAlign: 'center',
-    },
-    loginFormView: {
-      flex: 1
-    },
-    loginFormTextInput: {
-      height: 43,
-      fontSize: 14,
-      borderRadius: 5,
-      borderWidth: 1,
-      borderColor: '#eaeaea',
-      backgroundColor: '#fafafa',
-      paddingLeft: 10,
-      marginLeft: 15,
-      marginRight: 15,
-      marginTop: 5,
-      marginBottom: 5,
-    
-    },
-    loginButton: {
-      backgroundColor: '#3897f1',
-      borderRadius: 5,
-      height: 45,
-      marginTop: 10,
-    },
-    fbLoginButton: {
-      height: 45,
-      marginTop: 10,
-      backgroundColor: 'transparent',
-    },
+
+    appView:{ flex:1},
 });
   
     

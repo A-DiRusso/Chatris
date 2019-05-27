@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View , StyleSheet} from 'react-native'
 
 export default function Row({row}) {
 
@@ -13,17 +13,18 @@ export default function Row({row}) {
     )
 }
 
-const styles ={
+const styles = StyleSheet.create({
 
     row:{
-        flex:0,
+        position:'relative',
+        zIndex:1,
+
         flexDirection:'row'
     },
     cell:{
-
         width:25,
         height:25,
-        backgroundColor:'white',
+        backgroundColor:'rgba(0,0,0,0)',
         borderWidth: 0.5,
         borderColor:'black'
     },
@@ -46,6 +47,6 @@ const styles ={
         backgroundColor:'red'
     }
     
-}
+})
 
 
