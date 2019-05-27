@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+
 import { View, Text, Button, StyleSheet } from 'react-native';
 import io from 'socket.io-client'
+
 
 export default class GameLobby extends Component {
   constructor(props){
@@ -12,11 +14,13 @@ export default class GameLobby extends Component {
   }
 
   componentDidMount(){
+
     this.socket = io('http://10.150.21.157:3000');
 
     this.socket.emit('game lobby' )
 
     this.socket.on('game lobby', lobbyData =>this.setState({lobbyData}))
+
 
     this.socket.on('session id', data => {
       const {sessionID, token} = data
@@ -35,10 +39,12 @@ export default class GameLobby extends Component {
   }
   render() {
     return (
+
       <View style={styles.gameLobby}>
         <Text>This is the Users Page</Text>
         <Button onPress={this._createGame} title= 'CREATE GAME'></Button>
         
+
       </View>
     )
   }
