@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import { View, PanResponder, Dimensions, TouchableOpacity } from 'react-native';
-import Row from './Row';
-import { Figures } from '../assets/figures/Figures';
-
-
+import React, { Component } from 'react'
+import {View, Button, Text, TouchableOpacity, StyleSheet} from 'react-native'
+import Row from './Row'
+import {Figures} from '../assets/figures/Figures'
+import VideoScreen from './VideoScreen'
 
 
 
@@ -11,7 +10,6 @@ import { Figures } from '../assets/figures/Figures';
 export class Tetris extends Component {
     constructor(props){
         super(props);
-        this.position = (0, 0);
         this.state={
             board:[],
             height:15,
@@ -22,62 +20,35 @@ export class Tetris extends Component {
             isLoser:false,
             isWinner:false,
             gameSpeed:1000,
-            defauldtSpeed:1000,
+            defaultSpeed:1000,
             fastSpeed:100,
             interval:null,
-            rotate:false
+            rotate:false,
+            figureTypes:['horse','romb2','romb1','cube','line']
 
         }
     }
-    
     componentDidMount(){
-        this._createBoard(),
-        this._panResponder =  () => {PanResponder.create({
-            onStartShouldSetPanResponder: (evt, gestureState) => true,
-            onPanResponderMove: (evt, gestureState) => {
-            //     this.position.setValue({x: gestureState.dx, y: gestureState.dy})
-            // }, onPanResponderRelease: (evt, gestureState) => {
-            //     if (gestureState.dy > -12) {
-            //         console.log('swiped up');
-            //     }
-                console.warn("Swipe Moves", gestureState);
-            
-            }       
-        });}
+        this._createBoard()
     }
-    // _panResponder = PanResponder.create({
-    //     onStartShouldSetPanResponder: (evt, gestureState) => true,
-    //     onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
-    //     onMoveShouldSetPanResponder: (evt, gestureState) => true,
-    //     onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-
-    //     onPanResponderGrant: (evt, gestureState) => {
-    //         console.log('Grant');
-    //     },
-    //     onPanResponderMove: (evt, gestureState) => {
-    //         console.log('Move');
-    //     },
-    //     onPanResponderTerminationRequest: (evt, gestureState) => true,
-    //     onPanResponderRelease: (evt, gestureState) => {
-    //         console.log('Release');
-    //     },
-    //     onPanResponderTerminate: (evt, gestureState) => {
-    //         return true;
-    //     }
-    // })
 
 
     _mapFirstPieceToBoard= ()=>{
+        const {figureTypes} = this.state
 
-        let randomFigure = Figures[Math.floor(Math.random() * Figures.length)]
+        let randomFigure = figureTypes[Math.floor(Math.random() * figureTypes.length)]
 
+        let currentFigure = Figures.find(eaObj=> eaObj.type === randomFigure)
+        console.log(currentFigure)
         let updatedBoard = this.state.board;
-        randomFigure.path.forEach((eaArray)=>{
+        currentFigure.path.forEach((eaArray)=>{
             updatedBoard[eaArray[1]][eaArray[0]] = {...randomFigure, active:'active'}
         })
 
-        this.setState({board:updatedBoard, currentFigure:randomFigure}, this._gameLoop)
+        this.setState({board:updatedBoard, currentFigure:{...currentFigure}}, this._gameLoop)
     }
+
+
 
     _createBoard = ()=>{
         const {board, height, width} = this.state
@@ -97,16 +68,12 @@ export class Tetris extends Component {
     _returnBoard = ()=>{
         return (this.state.board.map((eaRow, i)=><Row row={eaRow} key={i}/>))
     }
-    
-   
 
-    
-    
     _gameLoop = ()=>{
         this.setState({
             interval:setInterval(()=>{
-                this._moveRight({keyCode:39})
                 this._loopLogic()
+                this._checkRows()
             }, this.state.gameSpeed)
         })
     }
@@ -115,11 +82,10 @@ export class Tetris extends Component {
     _loopLogic = ()=>{
         let isFigureMovable = this._isFigureMovable()
         if(this.state.currentFigure){
+                // this._checkGameSpeed()
             this._checkForNextFigure()
-            
             if (isFigureMovable){
                 this._moveCurrentFigure()
-            
             }else{
                 let filledBoard = this.state.board.map(eaRow => eaRow.map(eaCell => eaCell.active === 'active' ? {...eaCell, active:'filled'} : eaCell))
 
@@ -129,16 +95,14 @@ export class Tetris extends Component {
                     nextFigure:null
                 })
             }
-        
         } else{
-            let randomFigure = Figures[Math.floor(Math.random() * Figures.length)]
-            this.setState({currentFigure:randomFigure})
-        }
-        if (this.state.rotate) {
-            this._rotateFigure()
-        }
-        
+            const {figureTypes} = this.state
 
+            let randomFigure = figureTypes[Math.floor(Math.random() * figureTypes.length)]
+
+            let currentFigure = Figures.find(eaObj=> eaObj.type === randomFigure)
+            this.setState({currentFigure})
+        }
         this._updateBoard()
     }
 
@@ -149,14 +113,26 @@ export class Tetris extends Component {
         })
         this.setState({currentFigure:{...stepFigure, active:"active"}})
     }
+    _checkGameSpeed = ()=>{
+        const {speed, defaultSpeed} = this.state
+        if (speed !== defaultSpeed){
+            this.setState({gameSpeed:defaultSpeed})
+            clearInterval(this.state.interval)
+            this._gameLoop()
+            return
+        }
+    }
 
 
     _checkForNextFigure = ()=>{
         if (!this.state.nextFigure){
+            const {figureTypes} = this.state
 
-            let randomFigure = Figures[Math.floor(Math.random() * Figures.length)]
+            let randomFigure = figureTypes[Math.floor(Math.random() * figureTypes.length)]
 
-            this.setState({nextFigure:{...randomFigure}})
+            let nextFigure = Figures.find(eaObj=> eaObj.type === randomFigure)
+
+            this.setState({nextFigure})
         }
     }
 
@@ -217,37 +193,59 @@ export class Tetris extends Component {
             this.setState({currentFigure: {...this.state.currentFigure, path:myPath, active:"active"}},this._updateBoard)
         }
     }
+    _defaultSpeed = ()=>{
 
-    _rotateFigure = ()=>{
-        const {currentFigure, width, board} = this.state
-
-        let defaultFigure = Figures.find(eaFigure => (eaFigure.type === currentFigure.type && eaFigure.id === currentFigure.id))
-
-        let offsetLeft = currentFigure.path[0][0] - defaultFigure.path[0][0]
-        let offsetTop = currentFigure.path[0][1] - defaultFigure.path[0][1]
-
-        let nextFigure = {...Figures.find(eaFigure => (eaFigure.type === currentFigure.type && eaFigure.id === currentFigure.id + 1))}
-        if (!nextFigure.id){
-            nextFigure = {...Figures.find(eaFigure => (eaFigure.type === currentFigure.type && eaFigure.id === 1))}
-        }
-        let canRotate = false;
-
-        nextFigure.path = nextFigure.path.map(eaPath => [eaPath[0] + offsetLeft, eaPath[1] + offsetTop])
-
-        nextFigure.path.map(eaPath =>{
-            if ((eaPath[0] >= 0) || (eaPath[0] < width) || !board[eaPath[1]][eaPath[0]].active === 'filled'){
-                canRotate = true;
-            }
+        clearInterval(this.state.interval)
+        this.setState({
+            gameSpeed:this.state.defaultSpeed
+        }, ()=>{
+            this._gameLoop()
         })
 
-        if (nextFigure && canRotate){
-            this.setState({
-                currentFigure:{...nextFigure, active:"active"}
+    }
+
+
+    _moveDown = ()=>{
+        clearInterval(this.state.interval)
+        this.setState({
+            gameSpeed: this.state.fastSpeed
+        }, ()=>{
+            this._gameLoop()
+        })
+
+    }
+
+    
+
+    _rotateFigure = ()=>{
+        let isFigureMovable = this._isFigureMovable()
+        if(isFigureMovable){
+
+            const {currentFigure, width, board} = this.state
+    
+            let defaultFigure = Figures.find(eaFigure => (eaFigure.type === currentFigure.type && eaFigure.id === currentFigure.id))
+            let offsetLeft = currentFigure.path[1][0] - defaultFigure.path[1][0]
+            let offsetTop = currentFigure.path[1][1] - defaultFigure.path[1][1]
+            
+            let nextFigure = {...Figures.find(eaFigure => (eaFigure.type === currentFigure.type && eaFigure.id === currentFigure.id + 1))}
+            if (!nextFigure.id){
+                nextFigure = {...Figures.find(eaFigure => (eaFigure.type === currentFigure.type && eaFigure.id === 1))}
+            }
+            let canRotate = true;
+    
+            nextFigure.path = nextFigure.path.map(eaPath => [eaPath[0] + offsetLeft, eaPath[1] + offsetTop])
+    
+            nextFigure.path.map(eaPath =>{
+                if (!(eaPath[0] >= 0) || !(eaPath[0] < width) || board[eaPath[1]][eaPath[0]].active === 'filled'){
+                    canRotate = false
+                }
             })
+            if (nextFigure && canRotate){
+                this.setState({
+                    currentFigure:{...nextFigure, active:"active"}
+                }, this._updateBoard)
+            }
         }
-        
-        
-        
     }
 
     _updateBoard = ()=>{
@@ -265,11 +263,7 @@ export class Tetris extends Component {
                 clearInterval(this.state.interval)
                 this.setState({isLoser:true})
                 willCurrentFigureCollide = true
-                
             }
-
-            
-                
         })
         if(!willCurrentFigureCollide){
             this.setState({
@@ -277,44 +271,126 @@ export class Tetris extends Component {
                 rotate:false
             })
         }
-
-
-
+    }
+    _checkRows = ()=> {
+        const {board, width} = this.state
+        let fullRows = []
+        board.map((row, rowIndex) => {
+            let eaRow = row.map(eaObj=> eaObj.active)
+            if (eaRow.indexOf('') === -1 && eaRow.indexOf('active') === -1) {
+                fullRows.push(rowIndex)
+            }
+        });
+        if(fullRows.length){
+            let updatedBoard = board
+            fullRows.forEach(rowIndex=>{
+                updatedBoard.splice(rowIndex, 1)
+                let newRow = []
+                for (let x = 0; x< width; x++){
+                    newRow[x] = {
+                                        type:'empty',
+                                        active: ''
+                                    }
+                }
+                updatedBoard.unshift(newRow)
+                this.setState({score:this.state.score += 1})
+            })
+            this.setState({board:updatedBoard})
+        }
     }
 
-    // _moveFast = (e) => {
-    //     // if they swipe down
-    //     //then gameSpeed = this.state.fastSpeed
-    // }
-    
 
 
     render() {
         return (
-        // <View style={styles.boardContainer} {...this._panResponder.panHandlers}>
-        <View style={styles.boardContainer} >
-            {this.state.board.length > 0 ? this._returnBoard() : null}
-            {/* <View {...this._panResponder.panHandlers}> */}
+        <View style={styles.page}>
+            <View style={styles.boardContainer}>
+                {this.state.board.length > 0 ? this._returnBoard() : null}
+            <VideoScreen sessionID={this.props.sessionID} token={this.props.token}/>
+            </View>
+                <Text>score: {this.state.score}</Text>
             
-                 
-            {/* </View> */}
-         {/* <TouchableOpacity  onPress={() => {
-                console.log('you pressed the Touch');
-            }}>
-                <Image style={styles.img} source={require('../images/robots-dev.png')}/>
-            </TouchableOpacity> */}
+            <View style={styles.controllerContainer}>
+                <View>
+                    <Button 
+                        onPress={()=>{
+                            this._rotateFigure()
+                        }}
+                        title=" ^ "
+                        color="#841584"
+                        accessibilityLabel="Rotate"
+                    />
+                </View>
+                <Text>   </Text>
+                <View style={styles.buttonContainer}>
+
+                    <Button 
+                        onPress={()=>{
+                            this._moveLeft({keyCode:37})
+                        }}
+                        title="  <  "
+                        color="#841584"
+                        accessibilityLabel="Move left"
+                    />
+                    <Text>   </Text>
+                    <Button 
+                        onPress={()=>{
+                            this._moveRight({keyCode:39})
+                        }}
+                        title="  >  "
+                        color="#841584"
+                        accessibilityLabel="Move right"
+                    />
+                </View>
+                <View>
+                    <Text> </Text>
+                    <TouchableOpacity
+                        onPressIn={()=>{this._moveDown()}}
+                        onPressOut={()=>{this._defaultSpeed()}}
+                        accessibilityLabel="Move down"
+                        color="#841584"
+                    >   
+                        <Text
+                        style={styles.button}
+                        >{"           V  "}</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <Text>   </Text>
         </View>
         )
     }
 }
 
-const styles ={
-    boardContainer: {
-        flex:1,
+const styles =StyleSheet.create({
+    boardContainer:{
+        position:'relative',
+        zIndex:1,
+        flex:0,
         justifyContent:'center',
         alignItems:'center'
+    },
+    page:{
+        flex:1,
+        alignItems:'center',
+        justifyContent:'center'
+    },
+    controllerContainer:{
+        flex:0,
+        flexDirection:'column'
+    },
+    buttonContainer:{
+        zIndex:1,
+        flex:0,
+        flexDirection:'row'
+    },
+    button:{
+        backgroundColor:"#841584",
+        color:"white"
     }
-}
+    
+
+})
 
 export default Tetris
 
