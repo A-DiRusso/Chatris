@@ -6,6 +6,7 @@ import io from "socket.io-client";
 import LobbyButton from "./LobbyButton";
 
 export default class GameLobby extends Component {
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -68,6 +69,7 @@ export default class GameLobby extends Component {
 			</View>
 		);
 	}
+
 }
 
 styles = StyleSheet.create({

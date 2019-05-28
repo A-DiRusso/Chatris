@@ -39,7 +39,7 @@ export default class App extends Component {
       }
 
       else if (loggedIn === false){ 
-        return <LoginScreen logInUser={this._loginUser}/>
+        return <LoginScreen logInUser={this._loginUser} signUp={this._signUpUser}/>
 
     }else if (loggedIn && sessionID && token){
       return <Tetris sessionID={sessionID} token={token} player={player} userData={userData}/>
@@ -60,17 +60,34 @@ export default class App extends Component {
       );
       }
       
+ _signUpUser = async  (firstName, lastName, userName, password) =>{
 
+  let data = await axios.post('http://10.150.21.103:3000/signup',  {
+
+    firstName,
+    lastName,
+    userName,
+    password,
+    })
+    if(data.data){
+
+      this.setState({
+          loggedIn: true,
+          userData:data.data
+      })
+  }
+
+
+ }
 
   
 
-  _loginUser = async (firstName, lastName, userName, password) => {
+  _loginUser = async (userName, password) => {
 
 
-    let data = await axios.post('http://10.150.21.157:3000/login',  {
+    let data = await axios.post('http://10.150.21.103:3000/login',  {
 
-            firstName,
-            lastName,
+            
             userName,
             password,
         }
