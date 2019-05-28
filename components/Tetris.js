@@ -26,7 +26,10 @@ export class Tetris extends Component {
             figureTypes:['horse','romb2','romb1','cube','line'],
             movingFast:false,
             movingSlow:false,
-            stepCounter:0
+            stepCounter:0,
+            secondBoard:null,
+            secondPlayer:null,
+            secondScore:null
         }
     }
     componentDidMount(){
@@ -34,7 +37,25 @@ export class Tetris extends Component {
         this.socket = io("http://10.150.21.157:3000");
         this.socket.emit('game room setup', {userData, sessionID, player})
         this.socket.on('game room update', data =>{
-            console.log(data)
+
+            if(player === 'player1'){
+                const {board, score, userData} = data[sessionID]['player2']
+                this.setState({
+                    secondBoard:board,
+                    secondScore:score,
+                    secondPlayer:userData
+                })
+            }else if (player === 'player2'){
+                const {board, score, userData} = data[sessionID]['player1']
+                this.setState({
+                    secondBoard:board,
+                    secondScore:score,
+                    secondPlayer:userData
+                })
+            }
+            console.log(data[sessionID])
+
+
         })
 
 
@@ -209,6 +230,7 @@ export class Tetris extends Component {
     }
     _defaultSpeed = ()=>{
         const {defaultSpeed, fastSpeed, movingFast, movingSlow, stepCounter} = this.state
+        
         if(!movingFast && !movingSlow){
             clearInterval(this.state.interval)
             this.setState({
@@ -226,6 +248,7 @@ export class Tetris extends Component {
 
     _moveDown = ()=>{
         const {defaultSpeed, fastSpeed, movingSlow, movingFast, stepCounter} = this.state
+        
         if(stepCounter > 0){
             clearInterval(this.state.interval)
             this.setState({
@@ -343,6 +366,7 @@ export class Tetris extends Component {
         <View style={styles.page}>
             <View style={styles.boardContainer}>
                 {this.state.board.length > 0 ? this._returnBoard() : null}
+                
             <VideoScreen sessionID={this.props.sessionID} token={this.props.token}/>
             </View>
                 <Text>score: {this.state.score}</Text>
