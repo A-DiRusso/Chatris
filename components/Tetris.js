@@ -3,7 +3,8 @@ import {View, Button, Text, TouchableOpacity, StyleSheet} from 'react-native'
 import Row from './Row'
 import {Figures} from '../assets/figures/Figures'
 import VideoScreen from './VideoScreen'
-
+import {throttle, debounce} from 'throttle-debounce'
+import lodash from 'lodash'
 
 
 
@@ -24,7 +25,10 @@ export class Tetris extends Component {
             fastSpeed:100,
             interval:null,
             rotate:false,
-            figureTypes:['horse','romb2','romb1','cube','line']
+            figureTypes:['horse','romb2','romb1','cube','line'],
+            movingFast:false,
+            movingSlow:false,
+            stepCounter:0
 
         }
     }
@@ -194,24 +198,35 @@ export class Tetris extends Component {
         }
     }
     _defaultSpeed = ()=>{
+        const {defaultSpeed, fastSpeed, movingFast, movingSlow, stepCounter} = this.state
+        if(!movingFast && !movingSlow){
+            clearInterval(this.state.interval)
+            this.setState({
+                gameSpeed:defaultSpeed,
+                movingSlow:true
+            }, ()=>{
+                this._gameLoop()
+            })
+        }else{
+            this.setState({movingFast:false})
+        }
 
-        clearInterval(this.state.interval)
-        this.setState({
-            gameSpeed:this.state.defaultSpeed
-        }, ()=>{
-            this._gameLoop()
-        })
 
     }
 
-
     _moveDown = ()=>{
-        clearInterval(this.state.interval)
-        this.setState({
-            gameSpeed: this.state.fastSpeed
-        }, ()=>{
-            this._gameLoop()
-        })
+        const {defaultSpeed, fastSpeed, movingSlow, movingFast, stepCounter} = this.state
+        if(stepCounter > 0){
+            clearInterval(this.state.interval)
+            this.setState({
+                gameSpeed: fastSpeed,
+                stepCounter:0,
+                movingFast:true
+            }, ()=>{
+                this._gameLoop()
+            })
+        }
+
 
     }
 
@@ -268,7 +283,16 @@ export class Tetris extends Component {
         if(!willCurrentFigureCollide){
             this.setState({
                 board:activeBoard,
-                rotate:false
+                rotate:false,
+                stepCounter: this.state.stepCounter + 1
+            })
+        }
+        if(!this.state.movingFast){
+            clearInterval(this.state.interval)
+            this.setState({
+                gameSpeed:this.state.defaultSpeed
+            }, ()=>{
+                this._gameLoop()
             })
         }
     }
@@ -345,8 +369,8 @@ export class Tetris extends Component {
                 <View>
                     <Text> </Text>
                     <TouchableOpacity
-                        onPressIn={()=>{this._moveDown()}}
-                        onPressOut={()=>{this._defaultSpeed()}}
+                        onPressIn={this._moveDown}
+                        onPressOut={this._defaultSpeed}
                         accessibilityLabel="Move down"
                         color="#841584"
                     >   
