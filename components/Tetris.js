@@ -3,9 +3,7 @@ import {View, Button, Text, TouchableOpacity, Image, TouchableHighlight, StyleSh
 import Row from './Row'
 import {Figures} from '../assets/figures/Figures'
 import VideoScreen from './VideoScreen'
-import {throttle, debounce} from 'throttle-debounce'
-import lodash from 'lodash'
-
+import io from 'socket.io-client'
 
 
 export class Tetris extends Component {
@@ -29,10 +27,20 @@ export class Tetris extends Component {
             movingFast:false,
             movingSlow:false,
             stepCounter:0
-
         }
     }
     componentDidMount(){
+        const {userData, sessionID, player} =  this.props
+        console.log(userData)
+        this.socket = io("http://10.150.21.157:3000");
+        this.socket.emit('game room setup', {userData, sessionID, player})
+        this.socket.on('game room update', data =>{
+            console.log(data)
+        })
+
+
+
+
         this._createBoard()
     }
 
@@ -264,7 +272,7 @@ export class Tetris extends Component {
     }
 
     _updateBoard = ()=>{
-        const {currentFigure} = this.state
+        const {currentFigure, score} = this.state
         let activeBoard = this.state.board.map(row =>{
             return row.map(eaObj => eaObj.active === 'active' ? {type:'empty', active:''} : eaObj)
         })
@@ -295,6 +303,9 @@ export class Tetris extends Component {
                 this._gameLoop()
             })
         }
+        const {sessionID, player} =  this.props
+        this.socket.emit('game room update', {sessionID, player, activeBoard, score})
+
     }
     _checkRows = ()=> {
         const {board, width} = this.state

@@ -20,18 +20,19 @@ export default class App extends Component {
             loggedIn: false,
             userData:null,
             sessionID:null,
-            token:null
+            token:null,
+            player:null
         }
     }
     componentDidMount() {
 
 
     }
-    _setSessionID = (sessionID, token)=>{
-      this.setState({sessionID, token})
+    _setSessionID = (sessionID, token, player)=>{
+      this.setState({sessionID, token, player})
     }
     _createView = ()=>{
-      const {userData, sessionID, loggedIn, token} = this.state
+      const {userData, sessionID, loggedIn, token, player} = this.state
       if(loggedIn && !sessionID){
 
         return <GameLobby userData={userData} setSessionID={this._setSessionID}/>
@@ -41,7 +42,7 @@ export default class App extends Component {
         return <LoginScreen logInUser={this._loginUser}/>
 
     }else if (loggedIn && sessionID && token){
-      return <Tetris sessionID={sessionID} token={token}/>
+      return <Tetris sessionID={sessionID} token={token} player={player} userData={userData}/>
 
       
     }
@@ -66,7 +67,7 @@ export default class App extends Component {
   _loginUser = async (firstName, lastName, userName, password) => {
 
 
-    let data = await axios.post('http://192.168.5.150:3000/login',  {
+    let data = await axios.post('http://10.150.21.157:3000/login',  {
 
             firstName,
             lastName,

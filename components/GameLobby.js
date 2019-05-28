@@ -15,8 +15,7 @@ export default class GameLobby extends Component {
 	}
 
 	componentDidMount() {
-		// this.socket = io('http://10.150.21.157:3000');
-		this.socket = io("http://192.168.5.150:3000");
+		this.socket = io("http://10.150.21.157:3000");
 
 		this.socket.emit("game lobby");
 
@@ -29,25 +28,23 @@ export default class GameLobby extends Component {
 			this.setState({ lobbyData: lobby });
 		});
 
-		this.socket.on("session id", data => {
-			const { sessionID, token } = data;
+		this.socket.on("create room", data => {
+      const { sessionID, token , player} = data;
 
-			this.props.setSessionID(sessionID, token);
+			this.props.setSessionID(sessionID, token, player);
 		});
 
 		this.socket.on("create token", data => {
-			const { sessionID, token } = data;
-			console.log("session", sessionID);
-			console.log("token", token);
+			const { sessionID, token, player } = data;
 
-			this.props.setSessionID(sessionID, token);
+
+			this.props.setSessionID(sessionID, token, player);
 		});
 	}
 	_createGame = () => {
 		this.socket.emit("create room", this.props.userData);
 	};
 	_enterGame = sessionID => {
-		console.log("CREATING TOKEN");
 		this.socket.emit("create token", sessionID);
 	};
 	render() {
@@ -55,7 +52,6 @@ export default class GameLobby extends Component {
 			<View style={styles.gameLobby}>
 				{this.state.lobbyData
 					? this.state.lobbyData.map((gameObj, i) => {
-							console.log(gameObj);
 							return (
 								<LobbyButton
 									key={i}
