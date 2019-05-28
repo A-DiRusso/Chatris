@@ -31,7 +31,6 @@ export class Tetris extends Component {
     }
     componentDidMount(){
         const {userData, sessionID, player} =  this.props
-        console.log(userData)
         this.socket = io("http://10.150.21.157:3000");
         this.socket.emit('game room setup', {userData, sessionID, player})
         this.socket.on('game room update', data =>{
@@ -86,6 +85,9 @@ export class Tetris extends Component {
             interval:setInterval(()=>{
                 this._loopLogic()
                 this._checkRows()
+                const {sessionID, player} = this.props
+                const {board, score} = this.state
+                this.socket.emit('game room update', {sessionID, player, board, score})
             }, this.state.gameSpeed)
         })
     }
@@ -294,6 +296,7 @@ export class Tetris extends Component {
                 rotate:false,
                 stepCounter: this.state.stepCounter + 1
             })
+            
         }
         if(!this.state.movingFast){
             clearInterval(this.state.interval)
@@ -303,8 +306,7 @@ export class Tetris extends Component {
                 this._gameLoop()
             })
         }
-        const {sessionID, player} =  this.props
-        this.socket.emit('game room update', {sessionID, player, activeBoard, score})
+
 
     }
     _checkRows = ()=> {

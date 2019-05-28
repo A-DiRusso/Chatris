@@ -18,7 +18,10 @@ export default class GameLobby extends Component {
 	componentDidMount() {
 		this.socket = io("http://10.150.21.157:3000");
 
-		this.socket.emit("game lobby");
+    this.socket.emit("game lobby");
+    this.socket.on('game room update', (data)=>{
+      return null
+    })
 
 		this.socket.on("game lobby", lobbyData => {
 			let lobbyArray = Object.keys(lobbyData);
