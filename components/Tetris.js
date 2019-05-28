@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import {View, Button, Text, TouchableOpacity, StyleSheet} from 'react-native'
+import {View, Button, Text, TouchableOpacity, Image, TouchableHighlight, StyleSheet} from 'react-native'
 import Row from './Row'
 import {Figures} from '../assets/figures/Figures'
 import VideoScreen from './VideoScreen'
-
-
+import io from 'socket.io-client'
 
 
 export class Tetris extends Component {
@@ -24,11 +23,24 @@ export class Tetris extends Component {
             fastSpeed:100,
             interval:null,
             rotate:false,
-            figureTypes:['horse','romb2','romb1','cube','line']
-
+            figureTypes:['horse','romb2','romb1','cube','line'],
+            movingFast:false,
+            movingSlow:false,
+            stepCounter:0
         }
     }
     componentDidMount(){
+        const {userData, sessionID, player} =  this.props
+        console.log(userData)
+        this.socket = io("http://10.150.21.157:3000");
+        this.socket.emit('game room setup', {userData, sessionID, player})
+        this.socket.on('game room update', data =>{
+            console.log(data)
+        })
+
+
+
+
         this._createBoard()
     }
 
@@ -194,24 +206,35 @@ export class Tetris extends Component {
         }
     }
     _defaultSpeed = ()=>{
+        const {defaultSpeed, fastSpeed, movingFast, movingSlow, stepCounter} = this.state
+        if(!movingFast && !movingSlow){
+            clearInterval(this.state.interval)
+            this.setState({
+                gameSpeed:defaultSpeed,
+                movingSlow:true
+            }, ()=>{
+                this._gameLoop()
+            })
+        }else{
+            this.setState({movingFast:false})
+        }
 
-        clearInterval(this.state.interval)
-        this.setState({
-            gameSpeed:this.state.defaultSpeed
-        }, ()=>{
-            this._gameLoop()
-        })
 
     }
 
-
     _moveDown = ()=>{
-        clearInterval(this.state.interval)
-        this.setState({
-            gameSpeed: this.state.fastSpeed
-        }, ()=>{
-            this._gameLoop()
-        })
+        const {defaultSpeed, fastSpeed, movingSlow, movingFast, stepCounter} = this.state
+        if(stepCounter > 0){
+            clearInterval(this.state.interval)
+            this.setState({
+                gameSpeed: fastSpeed,
+                stepCounter:0,
+                movingFast:true
+            }, ()=>{
+                this._gameLoop()
+            })
+        }
+
 
     }
 
@@ -249,7 +272,7 @@ export class Tetris extends Component {
     }
 
     _updateBoard = ()=>{
-        const {currentFigure} = this.state
+        const {currentFigure, score} = this.state
         let activeBoard = this.state.board.map(row =>{
             return row.map(eaObj => eaObj.active === 'active' ? {type:'empty', active:''} : eaObj)
         })
@@ -268,9 +291,21 @@ export class Tetris extends Component {
         if(!willCurrentFigureCollide){
             this.setState({
                 board:activeBoard,
-                rotate:false
+                rotate:false,
+                stepCounter: this.state.stepCounter + 1
             })
         }
+        if(!this.state.movingFast){
+            clearInterval(this.state.interval)
+            this.setState({
+                gameSpeed:this.state.defaultSpeed
+            }, ()=>{
+                this._gameLoop()
+            })
+        }
+        const {sessionID, player} =  this.props
+        this.socket.emit('game room update', {sessionID, player, activeBoard, score})
+
     }
     _checkRows = ()=> {
         const {board, width} = this.state
@@ -311,7 +346,7 @@ export class Tetris extends Component {
                 <Text>score: {this.state.score}</Text>
             
             <View style={styles.controllerContainer}>
-                <View>
+                {/* <View>
                     <Button 
                         onPress={()=>{
                             this._rotateFigure()
@@ -320,69 +355,105 @@ export class Tetris extends Component {
                         color="#841584"
                         accessibilityLabel="Rotate"
                     />
-                </View>
-                <Text>   </Text>
-                <View style={styles.buttonContainer}>
+                </View> */}
 
-                    <Button 
+
+
+
+                {/* <Text>   </Text> */}
+                <View style={styles.threeButtonContainer}>
+
+                    {/* <Button 
                         onPress={()=>{
                             this._moveLeft({keyCode:37})
                         }}
                         title="  <  "
                         color="#841584"
                         accessibilityLabel="Move left"
-                    />
-                    <Text>   </Text>
-                    <Button 
+                        />
+                        <Text>   </Text>
+                        <Button 
                         onPress={()=>{
                             this._moveRight({keyCode:39})
                         }}
                         title="  >  "
                         color="#841584"
                         accessibilityLabel="Move right"
-                    />
-                </View>
-                <View>
-                    <Text> </Text>
-                    <TouchableOpacity
-                        onPressIn={()=>{this._moveDown()}}
-                        onPressOut={()=>{this._defaultSpeed()}}
-                        accessibilityLabel="Move down"
-                        color="#841584"
-                    >   
-                        <Text
-                        style={styles.button}
-                        >{"           V  "}</Text>
+                    /> */}
+                    <TouchableOpacity style={styles.arrowButtons} onPress={()=>{this._moveLeft({keyCode:37})}}>
+                        <Image
+                            // style={styles.button}
+                            source={(require('../assets/arrows/left-arrow-button.png'))}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.arrowButtons} onPress={()=>{this._rotateFigure()}}>
+                        <Image
+                            // style={styles.button}
+                            source={(require('../assets/arrows/rotate-arrow-button.png'))}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.arrowButtons}  onPress={()=>{this._moveRight({keyCode:39})}}>
+                        <Image
+                            // style={styles.button}
+                            source={(require('../assets/arrows/right-arrow-button.png'))}
+                        />
                     </TouchableOpacity>
                 </View>
+
+                <View style={styles.downButton}>
+                    <TouchableOpacity 
+                        onPressIn={()=>{this._moveDown()}}
+                        onPressOut={()=>{this._defaultSpeed()}}
+                        >
+                        <Image
+                            // style={styles.button}
+                            source={(require('../assets/arrows/down-arrow-button.png'))}
+                        />
+                </TouchableOpacity>
+                </View>
             </View>
-            <Text>   </Text>
+            {/* <Text>   </Text> */}
         </View>
         )
     }
 }
 
 const styles =StyleSheet.create({
-    boardContainer:{
-        position:'relative',
-        zIndex:1,
-        flex:0,
-        justifyContent:'center',
-        alignItems:'center'
-    },
     page:{
         flex:1,
         alignItems:'center',
         justifyContent:'center'
     },
-    controllerContainer:{
-        flex:0,
-        flexDirection:'column'
+    boardContainer:{
+        position:'relative',
+        zIndex:1,
+        flex:4,
+        justifyContent:'center',
+        alignItems:'center'
     },
-    buttonContainer:{
+    controllerContainer:{
+        flex:1,
+        flexDirection:'column',
+        // justifyContent: 'space-around'
+
+    },
+    threeButtonContainer:{
         zIndex:1,
         flex:0,
-        flexDirection:'row'
+        flexDirection:'row',
+        padding: 10,
+        justifyContent: 'space-evenly'
+
+    },
+    downButton:{
+        zIndex:1,
+        flex:0,
+        justifyContent: 'center',
+        flexDirection: 'row'
+    },
+    arrowButtons:{
+        flex: 0,
+        justifyContent: 'space-around'
     },
     button:{
         backgroundColor:"#841584",

@@ -5,10 +5,6 @@ import axios from 'axios';
 
 import LoginScreen from './components/LogInScreen'
 import Tetris from './components/Tetris'
-import VideoScreen from './components/VideoScreen'
-
-
-
 
 import { StyleSheet, View } from 'react-native';
 
@@ -24,18 +20,19 @@ export default class App extends Component {
             loggedIn: false,
             userData:null,
             sessionID:null,
-            token:null
+            token:null,
+            player:null
         }
     }
     componentDidMount() {
 
 
     }
-    _setSessionID = (sessionID, token)=>{
-      this.setState({sessionID, token})
+    _setSessionID = (sessionID, token, player)=>{
+      this.setState({sessionID, token, player})
     }
     _createView = ()=>{
-      const {userData, sessionID, loggedIn, token} = this.state
+      const {userData, sessionID, loggedIn, token, player} = this.state
       if(loggedIn && !sessionID){
 
         return <GameLobby userData={userData} setSessionID={this._setSessionID}/>
@@ -45,7 +42,7 @@ export default class App extends Component {
         return <LoginScreen logInUser={this._loginUser} signUp={this._signUpUser}/>
 
     }else if (loggedIn && sessionID && token){
-      return <Tetris sessionID={sessionID} token={token}/>
+      return <Tetris sessionID={sessionID} token={token} player={player} userData={userData}/>
 
       
     }
