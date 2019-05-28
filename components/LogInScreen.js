@@ -16,6 +16,7 @@ export default class LoginScreen extends Component {
             lastName: 'last',
             userName: 'email@email.com',
             password: 'password',
+            signUp: false
         }
     }
     componentDidMount() {
@@ -33,13 +34,11 @@ export default class LoginScreen extends Component {
     //   }
     }
 
-  render() {
-      const {firstName, lastName, userName, password} = this.state
-    return (
-      <KeyboardAvoidingView style={styles.containerView} behavior="padding">
 
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.loginScreenContainer}>
+    _signUpScreen = ()=>{
+      const {firstName, lastName, userName, password} = this.state
+
+        return (
           <View style={styles.loginFormView}>
           <Text style={styles.logoText}>Chatris</Text>
           <TextInput placeholder="First Name" 
@@ -69,21 +68,85 @@ export default class LoginScreen extends Component {
                      />
             <Button
               buttonStyle={styles.loginButton}
-              onPress={() => this.props.logInUser(this.state.firstName, 
+              onPress={() => this.props.signUp(this.state.firstName, 
                                              this.state.lastName, 
                                              this.state.userName, 
                                              this.state.password)}
-              title="Login"
-            />
-             
-            <Button
-              buttonStyle={styles.fbLoginButton}
-              title="Login with Facebook"
-              color="#3897f1"
+              title="Sign Up"
+            /><Button
+            buttonStyle={styles.fbLoginButton}
+            title="login"
+            color="#3897f1"
+            onPress={this._changeScreen}
             />
             
           </View>
+
+
+        )
+    }
+
+
+    _loginScreen = ()=>{
+
+      const { userName, password } = this.state
+
+      return (
+
+        <View style={styles.loginFormView}>
+        <Text style={styles.logoText}>Chatris</Text>
+        <TextInput placeholder="Username" 
+                   placeholderColor="#c4c3cb"   
+                   style={styles.loginFormTextInput}
+                   onChangeText={(userName) => this.setState({userName})}
+                   value={userName}
+                    />
+        <TextInput placeholder="Password" 
+                   placeholderColor="#c4c3cb" 
+                   style={styles.loginFormTextInput} 
+                   secureTextEntry={true}
+                   onChangeText={(password) => this.setState({password})}
+                   value={password}
+                   />
+          <Button
+            buttonStyle={styles.loginButton}
+            onPress={() => this.props.logInUser(
+                                           this.state.userName, 
+                                           this.state.password)}
+            title="Login"
+          />
+           
+          <Button
+            buttonStyle={styles.fbLoginButton}
+            title="Sign Up"
+            color="#3897f1"
+            onPress={this._changeScreen}
+          />
+         
         </View>
+        
+
+
+      )
+    }
+
+    _changeScreen = ()=>{
+
+      this.setState({signUp: !this.state.signUp})
+    }
+
+
+
+  render() {
+      const {firstName, lastName, userName, password} = this.state
+    return (
+      <KeyboardAvoidingView style={styles.containerView} behavior="padding">
+
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.loginScreenContainer}>
+          {this.state.signUp ? this._signUpScreen() : this._loginScreen()}
+        </View>
+
       </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     );

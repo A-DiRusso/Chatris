@@ -17,11 +17,18 @@ export default class GameLobby extends Component {
 
   componentDidMount(){
 
-    this.socket = io('http://10.150.21.157:3000');
+    this.socket = io('http://10.150.21.103:3000');
 
     this.socket.emit('game lobby' )
 
-    this.socket.on('game lobby', lobbyData =>this.setState({lobbyData}) )
+    this.socket.on('game lobby', lobbyData =>{
+      let lobbyArray = Object.keys(lobbyData)
+      let lobby = []
+      lobbyArray.forEach(key=>{
+        lobby.push(lobbyData[key])
+      })
+      this.setState({lobbyData:lobby})
+    } )
 
 
     this.socket.on('session id', data => {
