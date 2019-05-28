@@ -8,12 +8,10 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "lodash": "^4.17.11",
     "opentok-react-native": "^0.10.2",
     "react": "16.8.3",
     "react-native": "0.59.8",
     "socket.io-client": "^2.2.0",
-    "throttle-debounce": "^2.1.0",
     "websockets": "^0.2.0",
     "ws": "^7.0.0"
   },

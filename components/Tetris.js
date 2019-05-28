@@ -53,9 +53,6 @@ export class Tetris extends Component {
                     secondPlayer:userData
                 })
             }
-            console.log(data[sessionID])
-
-
         })
 
 
@@ -466,6 +463,7 @@ const styles =StyleSheet.create({
     threeButtonContainer:{
         zIndex:1,
         flex:0,
+        width:"100%",
         flexDirection:'row',
         padding: 10,
         justifyContent: 'space-evenly'
@@ -474,6 +472,7 @@ const styles =StyleSheet.create({
     downButton:{
         zIndex:1,
         flex:0,
+        marginTop:20,
         justifyContent: 'center',
         flexDirection: 'row'
     },
