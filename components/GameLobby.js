@@ -39,20 +39,20 @@ export default class GameLobby extends Component {
 
     this.socket.on('create token', data => {
       const {sessionID, token} = data
-      console.log('session', sessionID)
-      console.log('token', token)
+      // console.log('session', sessionID)
+      // console.log('token', token)
 
       this.props.setSessionID(sessionID, token)
     })
-
-
-
+  }
+  componentWillUnmount(){
+    this.socket.close()
   }
   _createGame = ()=>{
     this.socket.emit('create room', this.props.userData)
   }
   _enterGame = (sessionID)=>{
-    console.log("CREATING TOKEN")
+    // console.log("CREATING TOKEN")
     this.socket.emit('create token', sessionID)
   }
   render() {
@@ -60,7 +60,7 @@ export default class GameLobby extends Component {
 
       <View style={styles.gameLobby}>
         {this.state.lobbyData ? this.state.lobbyData.map((gameObj, i) =>{
-          console.log(gameObj)
+          // console.log(gameObj)
           return <LobbyButton
                     key={i} 
                     sessionID={gameObj.sessionId} 
