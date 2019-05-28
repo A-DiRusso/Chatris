@@ -66,7 +66,7 @@ export default class App extends Component {
   _loginUser = async (firstName, lastName, userName, password) => {
 
 
-    let data = await axios.post('http://10.150.21.157:3000/login',  {
+    let data = await axios.post('http://192.168.5.150:3000/login',  {
 
             firstName,
             lastName,
