@@ -6,7 +6,6 @@ import io from "socket.io-client";
 import LobbyButton from "./LobbyButton";
 
 export default class GameLobby extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -16,12 +15,13 @@ export default class GameLobby extends Component {
 	}
 
 	componentDidMount() {
+		// this.socket = io("http://10.150.20.113:3000");
 		this.socket = io("http://10.150.21.157:3000");
 
-    this.socket.emit("game lobby");
-    this.socket.on('game room update', (data)=>{
-      return null
-    })
+		this.socket.emit("game lobby");
+		this.socket.on("game room update", data => {
+			return null;
+		});
 
 		this.socket.on("game lobby", lobbyData => {
 			let lobbyArray = Object.keys(lobbyData);
@@ -33,14 +33,13 @@ export default class GameLobby extends Component {
 		});
 
 		this.socket.on("create room", data => {
-      const { sessionID, token , player} = data;
+			const { sessionID, token, player } = data;
 
 			this.props.setSessionID(sessionID, token, player);
 		});
 
 		this.socket.on("create token", data => {
 			const { sessionID, token, player } = data;
-
 
 			this.props.setSessionID(sessionID, token, player);
 		});
@@ -72,7 +71,6 @@ export default class GameLobby extends Component {
 			</View>
 		);
 	}
-
 }
 
 styles = StyleSheet.create({

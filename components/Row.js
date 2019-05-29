@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row"
 	},
 	cell: {
-		width: 25,
-		height: 25,
+		width: 32,
+		height: 32,
 		backgroundColor: "rgba(0,0,0,0)",
 		borderWidth: 0.5,
 		borderColor: "rgb(192,192,192)"
