@@ -4,6 +4,7 @@ import Row from './Row'
 import {Figures} from '../assets/figures/Figures'
 import VideoScreen from './VideoScreen'
 import io from 'socket.io-client'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 
 export class Tetris extends Component {
@@ -479,7 +480,8 @@ const styles =StyleSheet.create({
     boardContainer:{
         position:'relative',
         zIndex:1,
-        flex:4,
+        width:wp('95%'),
+        height: hp("64%"),
         justifyContent:'center',
         alignItems:'center',
         marginLeft: 7,

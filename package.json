@@ -11,6 +11,7 @@
     "opentok-react-native": "^0.10.2",
     "react": "16.8.3",
     "react-native": "0.59.8",
+    "react-native-responsive-screen": "^1.2.2",
     "socket.io-client": "^2.2.0",
     "websockets": "^0.2.0",
     "ws": "^7.0.0"
