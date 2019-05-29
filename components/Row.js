@@ -36,41 +36,47 @@ const styles = StyleSheet.create({
 		height: 25,
 		backgroundColor: "rgba(0,0,0,0)",
 		borderWidth: 0.5,
-		borderColor: "rgb(192,192,192)"
+		borderColor: "#E2F5FA"
 	},
 	line: {
 		backgroundColor: purpleBase,
 		borderColor: purpleBorder,
+		borderTopColor: '#E2F5FA',
 		padding: 2,
 		borderWidth: 2
 	},
 	cube: {
 		backgroundColor: yellowBase,
 		borderColor: yellowBorder,
+		borderTopColor: '#E2F5FA',
 		padding: 2,
 		borderWidth: 2
 	},
 	romb1: {
 		backgroundColor: skyBlueBase,
 		borderColor: skyBlueBorder,
+		borderTopColor: '#E2F5FA',
 		padding: 2,
 		borderWidth: 2
 	},
 	romb2: {
 		backgroundColor: greenBase,
 		borderColor: greenBorder,
+		borderTopColor: '#E2F5FA',
 		padding: 2,
 		borderWidth: 2
 	},
 	horse: {
 		backgroundColor: orangeBase,
 		borderColor: orangeBorder,
+		borderTopColor: '#E2F5FA',
 		padding: 2,
 		borderWidth: 2
 	},
 	triangle: {
 		backgroundColor: redBase,
 		borderColor: redBorder,
+		borderTopColor: '#E2F5FA',
 		padding: 2,
 		borderWidth: 2
 	}

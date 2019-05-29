@@ -34,7 +34,7 @@ export class Tetris extends Component {
     }
     componentDidMount(){
         const {userData, sessionID, player} =  this.props
-        this.socket = io("http://10.150.21.157:3000");
+        this.socket = io("http://10.150.21.103:3000");
         this.socket.emit('game room setup', {userData, sessionID, player})
         this.socket.on('game room update', data =>{
 
@@ -445,7 +445,8 @@ const styles =StyleSheet.create({
     page:{
         flex:1,
         alignItems:'center',
-        justifyContent:'center'
+        justifyContent:'center',
+        backgroundColor: '#96D2E0',
     },
     boardContainer:{
         position:'relative',

@@ -62,7 +62,7 @@ export default class App extends Component {
       
  _signUpUser = async  (firstName, lastName, userName, password) =>{
 
-  let data = await axios.post('http://10.150.21.157:3000/signup',  {
+  let data = await axios.post('http://10.150.21.103:3000/signup',  {
 
     firstName,
     lastName,
@@ -85,7 +85,7 @@ export default class App extends Component {
   _loginUser = async (userName, password) => {
 
 
-    let data = await axios.post('http://10.150.21.157:3000/login',  {
+    let data = await axios.post('http://10.150.21.103:3000/login',  {
             userName,
             password,
         }
@@ -102,40 +102,6 @@ export default class App extends Component {
     }
   }
 
-//   async onFbLoginPress() {
-//     try {
-//         const result = await Google.logInAsync({clientId:appId})
-  
-//         if (result.type === "success") {
-//             console.log(result.user)
-//           this.setState({
-//             signedIn: true,
-//             name: result.user.name,
-//             photoUrl: result.user.photoUrl
-//           })
-//         } else {
-//           console.log("cancelled")
-//         }
-//       } catch (e) {
-//         console.log("error", e)
-//       }
-//     }
-//       console.log("FACEBOOK LOGIN")
-//     const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(appId, {
-//       permissions: ['public_profile', 'email'],
-//     });
-//     console.log(type)
-//     console.log(token)
-//     console.log("HEY")
-//     if (type === 'success') {
-//       const response = await fetch(
-//         `https://graph.facebook.com/me?access_token=${token}`);
-//       Alert.alert(
-//         'Logged in!',
-//         `Hi ${(await response.json()).name}!`,
-//       );
-//     }
-//   }
 }
   const styles = StyleSheet.create({
 

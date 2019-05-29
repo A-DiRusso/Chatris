@@ -5,7 +5,6 @@ import axios from 'axios';
 import {StyleSheet, Keyboard, Text, View, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView} from 'react-native';
 import { Button } from 'react-native';
 
-// const appId = "609894231244-0qhicv602n7a56t35n4hmn4ahrd3mi7c.apps.googleusercontent.com"
 
 
 export default class LoginScreen extends Component {
@@ -20,18 +19,6 @@ export default class LoginScreen extends Component {
         }
     }
     componentDidMount() {
-    //   const url = 'ws://localhost:31337/chat'; 
-    //   this.connection = new WebSocket(url);
-    //   this.connection.onmessage = (e) => {
-    //     let data = JSON.parse(e.data);
-    //     data ? loggedIn : null;
-    //     this.setState({
-    //       userName: data.userName,
-    //       password: data.password,
-    //       firstName: data.firstName,
-    //       lastName:data.lastName
-    //     });
-    //   }
     }
 
 
@@ -125,7 +112,14 @@ export default class LoginScreen extends Component {
                                           this.state.password)}
             title="Login"
           />
-          
+           <Button
+              buttonStyle={styles.loginButton}
+              onPress={() => this.props.signUp(this.state.firstName, 
+                                             this.state.lastName, 
+                                             this.state.userName, 
+                                             this.state.password)}
+              title="Sign Up"
+            />
          
         </View>
         
@@ -156,50 +150,11 @@ export default class LoginScreen extends Component {
       </KeyboardAvoidingView>
     );
   }
-
-
-  
-
-
-
-//   async onFbLoginPress() {
-//     try {
-//         const result = await Google.logInAsync({clientId:appId})
-  
-//         if (result.type === "success") {
-//             console.log(result.user)
-//           this.setState({
-//             signedIn: true,
-//             name: result.user.name,
-//             photoUrl: result.user.photoUrl
-//           })
-//         } else {
-//           console.log("cancelled")
-//         }
-//       } catch (e) {
-//         console.log("error", e)
-//       }
-//     }
-//       console.log("FACEBOOK LOGIN")
-//     const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(appId, {
-//       permissions: ['public_profile', 'email'],
-//     });
-//     console.log(type)
-//     console.log(token)
-//     console.log("HEY")
-//     if (type === 'success') {
-//       const response = await fetch(
-//         `https://graph.facebook.com/me?access_token=${token}`);
-//       Alert.alert(
-//         'Logged in!',
-//         `Hi ${(await response.json()).name}!`,
-//       );
-//     }
-//   }
 }
   const styles = StyleSheet.create({
     containerView: {
       flex: 1,
+      backgroundColor: '#96D2E0'
     },
     loginScreenContainer: {
       flex: 1,
@@ -211,6 +166,7 @@ export default class LoginScreen extends Component {
       marginTop: 150,
       marginBottom: 30,
       textAlign: 'center',
+      color: '#E2F5FA'
     },
     loginFormView: {
       flex: 1
