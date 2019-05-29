@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 import { OTSession, OTPublisher, OTSubscriber } from "opentok-react-native";
-import io from "socket.io-client";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 // import { API_KEY, SESSION_ID, TOKEN } from 'react-native-dotenv';
 // ApiClient.init(API_KEY, SESSION_ID, TOKEN);
@@ -11,20 +11,35 @@ export default class VideoScreen extends Component {
 		super(props);
 		this.state = {
 			token: null,
-			width: this.props.width,
-			height: this.props.height
+			width: 20,
+			height: 20,
 		};
 
 		this.key = "46334622";
 		this.sessionID = this.props.sessionID;
+		this.videoRef = React.createRef();
 	}
 	componentWillMount() {}
 
-	componentDidMount() {}
+	componentDidMount() {
+		console.log(this.videoRef)
+		console.log(this.state.height)
+
+
+		this.setState({
+			width:this.videoRef.clientWidth,
+			height:this.videoRef.clientHeight
+
+		}, ()=>{
+			console.log(this.state.width)
+			console.log(this.state.height)
+		})
+	}
+
 
 	render() {
 		return (
-			<View style={styles.container}>
+			<View ref={videoRef => this.videoRef = videoRef} style={styles.container}>
 				<OTSession
 					apiKey={this.key}
 					sessionId={this.sessionID}
@@ -36,9 +51,9 @@ export default class VideoScreen extends Component {
 				/>
 				<OTSubscriber
 					style={{
-						width: "100%",
-						height: "100%",
-						insertMode: "append"
+						width:wp('95%'),
+						height: hp("64%"),
+
 					}}
 				/>
 			</View>
@@ -52,7 +67,5 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		backgroundColor: "rgba(0,0,0,0)",
-		borderColor: "black",
-		borderWidth: 5
 	}
 });
