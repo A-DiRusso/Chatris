@@ -26,14 +26,14 @@ export default function Row({ row }) {
 
 const styles = StyleSheet.create({
 	row: {
+		flex: 0.0666,
 		position: "relative",
 		zIndex: 1,
 
 		flexDirection: "row"
 	},
 	cell: {
-		width: 32,
-		height: 32,
+		flex: 0.1,
 		backgroundColor: "rgba(0,0,0,0)",
 		borderWidth: 0.5,
 		borderColor: "rgb(192,192,192)",
@@ -42,44 +42,43 @@ const styles = StyleSheet.create({
 	line: {
 		backgroundColor: purpleBase,
 		borderColor: purpleBorder,
-		borderTopColor: "#E2F5FA",
-		padding: 2,
-		borderWidth: 2
+		borderTopColor: "#E2F5FA"
+		// padding: 2
 	},
 	cube: {
 		backgroundColor: yellowBase,
 		borderColor: yellowBorder,
-		borderTopColor: "#E2F5FA",
-		padding: 2,
-		borderWidth: 2
+		borderTopColor: "#E2F5FA"
+		// padding: 2
+		// borderWidth: 2
 	},
 	romb1: {
 		backgroundColor: skyBlueBase,
 		borderColor: skyBlueBorder,
-		borderTopColor: "#E2F5FA",
-		padding: 2,
-		borderWidth: 2
+		borderTopColor: "#E2F5FA"
+		// padding: 2
+		// borderWidth: 2
 	},
 	romb2: {
 		backgroundColor: greenBase,
 		borderColor: greenBorder,
-		borderTopColor: "#E2F5FA",
-		padding: 2,
-		borderWidth: 2
+		borderTopColor: "#E2F5FA"
+		// padding: 2
+		// borderWidth: 2
 	},
 	horse: {
 		backgroundColor: orangeBase,
 		borderColor: orangeBorder,
-		borderTopColor: "#E2F5FA",
-		padding: 2,
-		borderWidth: 2
+		borderTopColor: "#E2F5FA"
+		// padding: 2
+		// borderWidth: 2
 	},
 	triangle: {
 		backgroundColor: redBase,
 		borderColor: redBorder,
-		borderTopColor: "#E2F5FA",
-		padding: 2,
-		borderWidth: 2
+		borderTopColor: "#E2F5FA"
+		// padding: 2
+		// borderWidth: 2
 	}
 });
 

@@ -367,23 +367,18 @@ export class Tetris extends Component {
                         <Text style={styles.versusText}>{this.props.userData.firstName}</Text>
                         <Text style={styles.scoreText}>{this.state.score}</Text>
                     </View>
-                    <View>
-                    
-                    </View>
                     <View style={styles.p2}>
-                    <Text style={styles.versusText}>
-                    {this.state.secondPlayer? this.state.secondPlayer.firstName: null}
-                    </Text>
-                    <Text style={styles.scoreText}>
-                    {this.state.secondScore}
-                    </Text>
-                    
+                        <Text style={styles.versusText}>
+                        {this.state.secondPlayer? this.state.secondPlayer.firstName: null}
+                        </Text>
+                        <Text style={styles.scoreText}>
+                        {this.state.secondScore}
+                        </Text>
                     </View>
                 </View>
             <View style={styles.boardContainer}>
                 {this.state.board.length > 0 ? this._returnBoard() : null}
-                
-            <VideoScreen sessionID={this.props.sessionID} token={this.props.token}/>
+                <VideoScreen sessionID={this.props.sessionID} token={this.props.token}/>
             </View>
             
             <View style={styles.controllerContainer}>
@@ -433,21 +428,25 @@ const styles =StyleSheet.create({
         backgroundColor: '#96D2E0',
     },
     versus:{
-        flex:.5,
+        flex:.8,
         zIndex:1,
         position: 'relative',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginTop:45
+        alignContent: 'flex-end',
+        // backgroundColor: 'purple'
         
     },
     p1:{
         flex:1,
         alignItems: 'center',
+        justifyContent: 'flex-end'
     },
     p2:{
         flex:1,
         alignItems: 'center',
+        justifyContent: 'flex-end'
+
     },
     versusText:{
         color: '#E2F5FA',
@@ -465,6 +464,8 @@ const styles =StyleSheet.create({
         flex:4,
         justifyContent:'center',
         alignItems:'center',
+        marginLeft: 7,
+        marginRight: 7
         },
     controllerContainer:{
         flex:1,
