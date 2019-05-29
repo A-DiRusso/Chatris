@@ -10,7 +10,9 @@ export default class VideoScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			token: null
+			token: null,
+			width: this.props.width,
+			height: this.props.height
 		};
 
 		this.key = "46334622";
@@ -32,7 +34,13 @@ export default class VideoScreen extends Component {
 					style={{ width: 0, height: 0 }}
 					properties={{ publishAudio: false }}
 				/>
-				<OTSubscriber style={{ width: 320, height: 480 }} />
+				<OTSubscriber
+					style={{
+						width: "100%",
+						height: "100%",
+						insertMode: "append"
+					}}
+				/>
 			</View>
 		);
 	}
@@ -40,11 +48,11 @@ export default class VideoScreen extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		position: "absolute",
-		flex: 0,
-		zIndex: 0,
+		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#96D2E0"
+		backgroundColor: "rgba(0,0,0,0)",
+		borderColor: "black",
+		borderWidth: 5
 	}
 });

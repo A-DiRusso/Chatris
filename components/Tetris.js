@@ -29,8 +29,12 @@ export class Tetris extends Component {
             stepCounter:0,
             secondBoard:null,
             secondPlayer:null,
-            secondScore:null
+            secondScore:null,
+            videoWidth: 0,
+            videoHeight: 0
+            
         }
+        this.boardRef = React.createRef();
     }
     componentDidMount(){
         const {userData, sessionID, player} =  this.props
@@ -78,7 +82,13 @@ export class Tetris extends Component {
             updatedBoard[eaArray[1]][eaArray[0]] = {...randomFigure, active:'active'}
         })
 
-        this.setState({board:updatedBoard, currentFigure:{...currentFigure}}, this._gameLoop)
+        this.setState({
+            board:updatedBoard, 
+            currentFigure:{...currentFigure},
+            videoWidth: this.boardRef.current.clientWidth,
+            videoHeight: this.boardRef.current.clientHeight
+        }, 
+            this._gameLoop)
     }
 
 
@@ -379,11 +389,16 @@ export class Tetris extends Component {
                         </Text>
                     </View>
                 </View>
-            <View style={styles.boardContainer}>
+            <View style={styles.boardContainer} ref={this.boardRef}>
                 {this.state.board.length > 0 ? this._returnBoard() : null}
-                <VideoScreen sessionID={this.props.sessionID} token={this.props.token}/>
+                
+                <View style={{width: '100%', height: '100%', position: 'absolute', zIndex: 0}}>
+                    <VideoScreen width={this.state.videoWidth} height={this.state.videoHeight} sessionID={this.props.sessionID} token={this.props.token}/>
+                </View>
             </View>
             
+
+
             <View style={styles.controllerContainer}>
             
                 <View style={styles.threeButtonContainer}>
