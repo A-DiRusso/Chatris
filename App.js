@@ -1,17 +1,15 @@
-
 import React, { Component } from "react";
-import GameLobby from './components/GameLobby';
-import axios from 'axios';
+import GameLobby from "./components/GameLobby";
+import axios from "axios";
 
-import LoginScreen from './components/LogInScreen'
-import Tetris from './components/Tetris'
+import LoginScreen from "./components/LogInScreen";
+import Tetris from "./components/Tetris";
 
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from "react-native";
 
 // import Chat from "./components/Chat";
 
 // const appId = "609894231244-0qhicv602n7a56t35n4hmn4ahrd3mi7c.apps.googleusercontent.com"
-
 
 export default class App extends Component {
     constructor(props) {
@@ -102,10 +100,8 @@ export default class App extends Component {
     }
   }
 
-}
-  const styles = StyleSheet.create({
 
-    appView:{ flex:1},
+}
+const styles = StyleSheet.create({
+	appView: { flex: 1 }
 });
-  
-    

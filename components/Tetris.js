@@ -34,7 +34,10 @@ export class Tetris extends Component {
     }
     componentDidMount(){
         const {userData, sessionID, player} =  this.props
-        this.socket = io("http://10.150.21.103:3000");
+
+        // this.socket = io("http://10.150.20.113:3000");
+        this.socket = io('http://10.150.21.157:3000');
+
         this.socket.emit('game room setup', {userData, sessionID, player})
         this.socket.on('game room update', data =>{
 
@@ -362,63 +365,48 @@ export class Tetris extends Component {
         return (
         <View style={styles.page}>
             <View style={styles.boardContainer}>
+                <View style={styles.versus}>
+                    <View style={styles.p1}>
+                        <Text>{this.props.userData.firstName}</Text>
+                        <Text>{this.state.score}</Text>
+                    </View>
+                    <View style={styles.p2}>
+                    <Text>
+                    {this.state.secondPlayer? this.state.secondPlayer.firstName: 'no player'}
+                    <Text>
+                    {this.state.secondScore}
+                    </Text>
+
+                       </Text>
+                    </View>
+                </View>
+                <View style={styles.emptyVersus}></View>
+
                 {this.state.board.length > 0 ? this._returnBoard() : null}
                 
             <VideoScreen sessionID={this.props.sessionID} token={this.props.token}/>
             </View>
-                <Text>score: {this.state.score}</Text>
             
             <View style={styles.controllerContainer}>
-                {/* <View>
-                    <Button 
-                        onPress={()=>{
-                            this._rotateFigure()
-                        }}
-                        title=" ^ "
-                        color="#841584"
-                        accessibilityLabel="Rotate"
-                    />
-                </View> */}
-
-
-
-
-                {/* <Text>   </Text> */}
+             
                 <View style={styles.threeButtonContainer}>
 
-                    {/* <Button 
-                        onPress={()=>{
-                            this._moveLeft({keyCode:37})
-                        }}
-                        title="  <  "
-                        color="#841584"
-                        accessibilityLabel="Move left"
-                        />
-                        <Text>   </Text>
-                        <Button 
-                        onPress={()=>{
-                            this._moveRight({keyCode:39})
-                        }}
-                        title="  >  "
-                        color="#841584"
-                        accessibilityLabel="Move right"
-                    /> */}
                     <TouchableOpacity style={styles.arrowButtons} onPress={()=>{this._moveLeft({keyCode:37})}}>
                         <Image
                             // style={styles.button}
-                            source={(require('../assets/arrows/left-arrow-button.png'))}
+                            source={(require('../assets/arrows/left-arrow-60.png'))}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.arrowButtons} onPress={()=>{this._rotateFigure()}}>
                         <Image
                             // style={styles.button}
-                            source={(require('../assets/arrows/rotate-arrow-button.png'))}
+                            source={(require('../assets/arrows/rotate-button-60.png'))}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.arrowButtons}  onPress={()=>{this._moveRight({keyCode:39})}}>
                         <Image
                             // style={styles.button}
-                            source={(require('../assets/arrows/right-arrow-button.png'))}
+                            source={(require('../assets/arrows/right-arrow-60.png'))}
                         />
                     </TouchableOpacity>
                 </View>
@@ -430,7 +418,7 @@ export class Tetris extends Component {
                         >
                         <Image
                             // style={styles.button}
-                            source={(require('../assets/arrows/down-arrow-button.png'))}
+                            source={(require('../assets/arrows/down-arrow-60.png'))}
                         />
                 </TouchableOpacity>
                 </View>
@@ -448,16 +436,37 @@ const styles =StyleSheet.create({
         justifyContent:'center',
         backgroundColor: '#96D2E0',
     },
+    versus:{
+        flex:1,
+        zIndex:1,
+        position: 'relative',
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+        
+    },
+    p1:{
+        flex:1,
+        backgroundColor: 'red',
+        alignItems: 'center'
+    },
+    p2:{
+        flex:1,
+        backgroundColor: 'blue',
+        alignItems: 'center'
+
+    },
     boardContainer:{
         position:'relative',
         zIndex:1,
         flex:4,
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        paddingTop: 45
     },
     controllerContainer:{
         flex:1,
         flexDirection:'column',
+        paddingBottom: 60
         // justifyContent: 'space-around'
 
     },
@@ -466,7 +475,7 @@ const styles =StyleSheet.create({
         flex:0,
         width:"100%",
         flexDirection:'row',
-        padding: 10,
+        paddingTop: 25,
         justifyContent: 'space-evenly'
 
     },
@@ -481,12 +490,11 @@ const styles =StyleSheet.create({
         flex: 0,
         justifyContent: 'space-around'
     },
-    button:{
-        backgroundColor:"#841584",
-        color:"white"
+    emptyVersus: {
+        position: 'absolute',
+        flex: 1,
+        zIndex: 0
     }
-    
-
 })
 
 export default Tetris
