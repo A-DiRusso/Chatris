@@ -35,7 +35,7 @@ export class Tetris extends Component {
     componentDidMount(){
         const {userData, sessionID, player} =  this.props
         // this.socket = io("http://10.150.20.113:3000");
-        this.socket = io('http://10.150.21.157:3000');
+        this.socket = io('http://10.150.21.157:3001');
         this.socket.emit('game room setup', {userData, sessionID, player})
         this.socket.on('game room update', data =>{
 
@@ -361,34 +361,34 @@ export class Tetris extends Component {
 
     render() {
         return (
-        <View style={styles.page}>
-            <View style={styles.boardContainer}>
-                <View style={styles.versus}>
+            <View style={styles.page}>
+            <View style={styles.versus}>
                     <View style={styles.p1}>
-                        <Text>{this.props.userData.firstName}</Text>
-                        <Text>{this.state.score}</Text>
+                        <Text style={styles.versusText}>{this.props.userData.firstName}</Text>
+                        <Text style={styles.scoreText}>{this.state.score}</Text>
+                    </View>
+                    <View>
+                    
                     </View>
                     <View style={styles.p2}>
-                    <Text>
-                    {this.state.secondPlayer? this.state.secondPlayer.firstName: 'no player'}
-                    <Text>
+                    <Text style={styles.versusText}>
+                    {this.state.secondPlayer? this.state.secondPlayer.firstName: null}
+                    </Text>
+                    <Text style={styles.scoreText}>
                     {this.state.secondScore}
                     </Text>
-
-                       </Text>
+                    
                     </View>
                 </View>
-                <View style={styles.emptyVersus}></View>
-
+            <View style={styles.boardContainer}>
                 {this.state.board.length > 0 ? this._returnBoard() : null}
                 
             <VideoScreen sessionID={this.props.sessionID} token={this.props.token}/>
             </View>
             
             <View style={styles.controllerContainer}>
-             
+            
                 <View style={styles.threeButtonContainer}>
-
                     <TouchableOpacity style={styles.arrowButtons} onPress={()=>{this._moveLeft({keyCode:37})}}>
                         <Image
                             // style={styles.button}
@@ -408,7 +408,6 @@ export class Tetris extends Component {
                         />
                     </TouchableOpacity>
                 </View>
-
                 <View style={styles.downButton}>
                     <TouchableOpacity 
                         onPressIn={()=>{this._moveDown()}}
@@ -426,31 +425,39 @@ export class Tetris extends Component {
         )
     }
 }
-
 const styles =StyleSheet.create({
     page:{
         flex:1,
         alignItems:'center',
-        justifyContent:'center'
+        justifyContent:'center',
+        backgroundColor: '#96D2E0',
     },
     versus:{
-        flex:1,
+        flex:.5,
         zIndex:1,
         position: 'relative',
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        marginTop:45
         
     },
     p1:{
         flex:1,
-        backgroundColor: 'red',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     p2:{
         flex:1,
-        backgroundColor: 'blue',
-        alignItems: 'center'
-
+        alignItems: 'center',
+    },
+    versusText:{
+        color: '#E2F5FA',
+        fontWeight:'bold',
+        fontSize:30
+    },
+    scoreText:{
+        color: '#177EE8',
+        fontWeight:'bold',
+        fontSize:30
     },
     boardContainer:{
         position:'relative',
@@ -458,14 +465,12 @@ const styles =StyleSheet.create({
         flex:4,
         justifyContent:'center',
         alignItems:'center',
-        paddingTop: 45
-    },
+        },
     controllerContainer:{
         flex:1,
         flexDirection:'column',
         paddingBottom: 60
         // justifyContent: 'space-around'
-
     },
     threeButtonContainer:{
         zIndex:1,
@@ -474,7 +479,6 @@ const styles =StyleSheet.create({
         flexDirection:'row',
         paddingTop: 25,
         justifyContent: 'space-evenly'
-
     },
     downButton:{
         zIndex:1,

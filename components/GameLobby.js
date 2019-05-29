@@ -16,7 +16,7 @@ export default class GameLobby extends Component {
 
 	componentDidMount() {
 		// this.socket = io("http://10.150.20.113:3000");
-		this.socket = io("http://10.150.21.157:3000");
+		this.socket = io("http://10.150.21.157:3001");
 
 		this.socket.emit("game lobby");
 		this.socket.on("game room update", data => {
@@ -44,6 +44,11 @@ export default class GameLobby extends Component {
 			this.props.setSessionID(sessionID, token, player);
 		});
 	}
+
+	componentWillUnmount() {
+		this.socket.close();
+	}
+
 	_createGame = () => {
 		this.socket.emit("create room", this.props.userData);
 	};
@@ -78,6 +83,7 @@ styles = StyleSheet.create({
 		height: 100,
 		flex: 1,
 		justifyContent: "center",
-		alignContent: "center"
+		alignContent: "center",
+		backgroundColor: "#96D2E0"
 	}
 });

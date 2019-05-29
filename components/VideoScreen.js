@@ -45,6 +45,6 @@ const styles = StyleSheet.create({
 		zIndex: 0,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#F5FCFF"
+		backgroundColor: "#96D2E0"
 	}
 });
