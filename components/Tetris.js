@@ -39,21 +39,24 @@ export class Tetris extends Component {
         this.socket.emit('game room setup', {userData, sessionID, player})
         this.socket.on('game room update', data =>{
 
-            if(player === 'player1'){
-                const {board, score, userData} = data[sessionID]['player2']
-                this.setState({
-                    secondBoard:board,
-                    secondScore:score,
-                    secondPlayer:userData
-                })
-            }else if (player === 'player2'){
-                const {board, score, userData} = data[sessionID]['player1']
-                this.setState({
-                    secondBoard:board,
-                    secondScore:score,
-                    secondPlayer:userData
-                })
-            }
+            if(data[sessionID]){
+                if(data[sessionID]['player2']){
+                    if(player === 'player1'){
+                        const {board, score, userData} = data[sessionID]['player2']
+                        this.setState({
+                            secondBoard:board,
+                            secondScore:score,
+                            secondPlayer:userData
+                        })
+                    }else if (player === 'player2'){
+                        const {board, score, userData} = data[sessionID]['player1']
+                        this.setState({
+                            secondBoard:board,
+                            secondScore:score,
+                            secondPlayer:userData
+                        })
+                    }
+        }}
         })
 
 
