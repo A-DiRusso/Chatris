@@ -47,28 +47,29 @@ export class Tetris extends Component {
             if(data[sessionID]){
                 if(data[sessionID]['player2']){
                     if(player === 'player1'){
-                        const {board, score, userData} = data[sessionID]['player2']
+                        const dataObj = data[sessionID]['player2']
                         this.setState({
-                            secondBoard:board,
-                            secondScore:score,
-                            secondPlayer:userData
+                            secondBoard:dataObj.board,
+                            secondScore:dataObj.score,
+                            secondPlayer:dataObj.userData
                         })
                     }else if (player === 'player2'){
-                        const {board, score, userData} = data[sessionID]['player1']
+                        const dataObj = data[sessionID]['player2']
+
                         this.setState({
-                            secondBoard:board,
-                            secondScore:score,
-                            secondPlayer:userData
-                        })
+                            secondBoard:dataObj.board,
+                            secondScore:dataObj.score,
+                            secondPlayer:dataObj.userData
+                        }, ()=>{console.log(this.state.secondPlayer)})
                     }
         }}
         })
 
 
 
-
         this._createBoard()
     }
+    
 
 
     _mapFirstPieceToBoard= ()=>{
