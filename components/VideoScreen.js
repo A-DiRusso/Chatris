@@ -51,8 +51,8 @@ export default class VideoScreen extends Component {
 				/>
 				<OTSubscriber
 					style={{
-						width:wp('95%'),
-						height: hp("64%"),
+						width:wp('82%'),
+						height: hp("60%"),
 
 					}}
 				/>
