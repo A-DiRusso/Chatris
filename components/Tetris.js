@@ -28,7 +28,6 @@ export class Tetris extends Component {
             movingFast:false,
             movingSlow:false,
             stepCounter:0,
-            secondBoard:null,
             secondPlayer:null,
             secondScore:null,
             videoWidth: 0,
@@ -49,7 +48,6 @@ export class Tetris extends Component {
                     if(player === 'player1'){
                         const dataObj = data[sessionID]['player2']
                         this.setState({
-                            secondBoard:dataObj.board,
                             secondScore:dataObj.score,
                             secondPlayer:dataObj.userData
                         })
@@ -57,7 +55,6 @@ export class Tetris extends Component {
                         const dataObj = data[sessionID]['player2']
 
                         this.setState({
-                            secondBoard:dataObj.board,
                             secondScore:dataObj.score,
                             secondPlayer:dataObj.userData
                         }, ()=>{console.log(this.state.secondPlayer)})
@@ -119,9 +116,6 @@ export class Tetris extends Component {
             interval:setInterval(()=>{
                 this._loopLogic()
                 this._checkRows()
-                const {sessionID, player} = this.props
-                const {board, score} = this.state
-                this.socket.emit('game room update', {sessionID, player, board, score})
             }, this.state.gameSpeed)
         })
     }
@@ -257,8 +251,6 @@ export class Tetris extends Component {
         }else{
             this.setState({movingFast:false})
         }
-
-
     }
 
     _moveDown = ()=>{
@@ -274,8 +266,6 @@ export class Tetris extends Component {
                 this._gameLoop()
             })
         }
-
-
     }
 
     
@@ -350,7 +340,7 @@ export class Tetris extends Component {
 
     }
     _checkRows = ()=> {
-        const {board, width} = this.state
+        const {board, width, score} = this.state
         let fullRows = []
         board.map((row, rowIndex) => {
             let eaRow = row.map(eaObj=> eaObj.active)
@@ -371,6 +361,8 @@ export class Tetris extends Component {
                 }
                 updatedBoard.unshift(newRow)
                 this.setState({score:this.state.score += 1})
+                const {player, sessionID} = this.props
+                this.socket.emit('game room update', {sessionID, player, score})
             })
             this.setState({board:updatedBoard})
         }

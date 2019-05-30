@@ -19,27 +19,14 @@ export default class LoginScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			firstName: "first",
-			lastName: "last",
-			userName: "email@email.com",
-			password: "password",
+			firstName: "",
+			lastName: "",
+			userName: "",
+			password: "",
 			signUp: false
 		};
 	}
-	componentDidMount() {
-		//   const url = 'ws://localhost:31337/chat';
-		//   this.connection = new WebSocket(url);
-		//   this.connection.onmessage = (e) => {
-		//     let data = JSON.parse(e.data);
-		//     data ? loggedIn : null;
-		//     this.setState({
-		//       userName: data.userName,
-		//       password: data.password,
-		//       firstName: data.firstName,
-		//       lastName:data.lastName
-		//     });
-		//   }
-	}
+
 
 	_signUpScreen = () => {
 		const { firstName, lastName, userName, password } = this.state;
@@ -69,7 +56,7 @@ export default class LoginScreen extends Component {
 					value={lastName}
 				/>
 				<TextInput
-					placeholder="Username"
+					placeholder="Email"
 					placeholderColor="#c4c3cb"
 					style={styles.loginFormTextInput}
 					onChangeText={userName => this.setState({ userName })}
@@ -96,12 +83,6 @@ export default class LoginScreen extends Component {
 					title="Sign Up"
 				/>
 
-				<Button
-					buttonStyle={styles.fbLoginButton}
-					title="login"
-					color="#3897f1"
-					onPress={this._changeScreen}
-				/>
 			</View>
 		);
 	};
@@ -113,7 +94,7 @@ export default class LoginScreen extends Component {
 			<View style={styles.loginFormView}>
 				<Text style={styles.logoText}>Chatris</Text>
 				<TextInput
-					placeholder="Username"
+					placeholder="Email"
 					placeholderColor="#c4c3cb"
 					style={styles.loginFormTextInput}
 					onChangeText={userName => this.setState({ userName })}
@@ -157,46 +138,33 @@ export default class LoginScreen extends Component {
 						{this.state.signUp
 							? this._signUpScreen()
 							: this._loginScreen()}
+							
+							
+						{this.state.signUp ? 
+							
+							
+							<Button
+								onPress={this._changeScreen}
+								title={'Already a user?'}
+							
+							></Button>
+							:
+							<Button
+							onPress={this._changeScreen}
+							title={'new user? sign-up'}
+						
+							>
+							</Button>
+								
+						}
+							
+
 					</View>
 				</TouchableWithoutFeedback>
 			</KeyboardAvoidingView>
 		);
 	}
 
-	//   async onFbLoginPress() {
-	//     try {
-	//         const result = await Google.logInAsync({clientId:appId})
-
-	//         if (result.type === "success") {
-	//             console.log(result.user)
-	//           this.setState({
-	//             signedIn: true,
-	//             name: result.user.name,
-	//             photoUrl: result.user.photoUrl
-	//           })
-	//         } else {
-	//           console.log("cancelled")
-	//         }
-	//       } catch (e) {
-	//         console.log("error", e)
-	//       }
-	//     }
-	//       console.log("FACEBOOK LOGIN")
-	//     const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(appId, {
-	//       permissions: ['public_profile', 'email'],
-	//     });
-	//     console.log(type)
-	//     console.log(token)
-	//     console.log("HEY")
-	//     if (type === 'success') {
-	//       const response = await fetch(
-	//         `https://graph.facebook.com/me?access_token=${token}`);
-	//       Alert.alert(
-	//         'Logged in!',
-	//         `Hi ${(await response.json()).name}!`,
-	//       );
-	//     }
-	//   }
 }
 const styles = StyleSheet.create({
 	containerView: {
