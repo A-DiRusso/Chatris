@@ -16,7 +16,7 @@ export default class GameLobby extends Component {
 
 	componentDidMount() {
 		// this.socket = io("http://10.150.20.113:3000");
-		this.socket = io("http://10.150.21.157:3001");
+		this.socket = io("https://chatris.bugbyte.dev");
 
 		this.socket.emit("game lobby");
 		this.socket.on("game room update", data => {
@@ -70,9 +70,12 @@ export default class GameLobby extends Component {
 									clickHandler={this._enterGame}
 								/>
 							);
-					  })
+					})
 					: null}
-				<Button onPress={this._createGame} title="CREATE GAME" />
+					<View style={{marginTop:25}}>
+
+				<Button onPress={this._createGame} title="CREATE NEW GAME" />
+					</View>
 			</View>
 		);
 	}
@@ -80,10 +83,10 @@ export default class GameLobby extends Component {
 
 styles = StyleSheet.create({
 	gameLobby: {
-		height: 100,
 		flex: 1,
-		justifyContent: "center",
-		alignContent: "center",
+		flexDirection:'column',
+		justifyContent:'center',
+		alignItems:'center',
 		backgroundColor: "#96D2E0"
 	}
 });
