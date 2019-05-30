@@ -19,9 +19,9 @@ export class Tetris extends Component {
             score:0,
             isLoser:false,
             isWinner:false,
-            gameSpeed:1000,
-            defaultSpeed:1000,
-            fastSpeed:100,
+            gameSpeed:150,
+            defaultSpeed:150,
+            fastSpeed:15,
             interval:null,
             rotate:false,
             figureTypes:['horse','romb2','romb1','cube','line'],
@@ -128,6 +128,7 @@ export class Tetris extends Component {
 
     
     _loopLogic = ()=>{
+        if (this.state.stepCounter % 3 === 0) {
         let isFigureMovable = this._isFigureMovable()
         if(this.state.currentFigure){
                 // this._checkGameSpeed()
@@ -150,6 +151,10 @@ export class Tetris extends Component {
 
             let currentFigure = Figures.find(eaObj=> eaObj.type === randomFigure)
             this.setState({currentFigure})
+        }
+    }
+        if(this.state.rotate){
+            this._rotateFigure()
         }
         this._updateBoard()
     }
@@ -205,11 +210,9 @@ export class Tetris extends Component {
         })
         return isMovable
     }
-    _moveLeft = e=>{
+    _moveLeft = ()=>{
         const {currentFigure, board} = this.state
-        if(e.keyCode !== 37 || !currentFigure){
-            return null
-        }
+
         let canMoveLeft = true;
         currentFigure.path.map(eaPath =>{
             if (!(eaPath[0] - 1 >= 0)|| (board[eaPath[1]][eaPath[0] - 1].active === 'filled')){
@@ -219,15 +222,13 @@ export class Tetris extends Component {
         if (canMoveLeft){
 
             let myPath = currentFigure.path.map(eaFig=>[eaFig[0] - 1, eaFig[1]])
-            this.setState({currentFigure: {...this.state.currentFigure, path:myPath, active:"active"}},this._updateBoard)
+            this.setState({currentFigure: {...this.state.currentFigure, path:myPath, active:"active"}})
+            this._updateBoard()
         }
     }
-    _moveRight = e=>{
+    _moveRight = ()=>{
         const {currentFigure, board, width} = this.state
 
-        if(e.keyCode !== 39 || !currentFigure){
-            return null
-        }
         let canMoveRight = true;
         currentFigure.path.map(eaPath =>{
             if (!(eaPath[0] + 1 < width)|| (board[eaPath[1]][eaPath[0] + 1].active === 'filled')){
@@ -238,7 +239,8 @@ export class Tetris extends Component {
             if (canMoveRight){
 
             let myPath = currentFigure.path.map(eaFig=>[eaFig[0] + 1, eaFig[1]])
-            this.setState({currentFigure: {...this.state.currentFigure, path:myPath, active:"active"}},this._updateBoard)
+            this.setState({currentFigure: {...this.state.currentFigure, path:myPath, active:"active"}})
+            this._updateBoard()
         }
     }
     _defaultSpeed = ()=>{
@@ -277,7 +279,9 @@ export class Tetris extends Component {
     }
 
     
-
+    _rotate = ()=>{
+        this.setState({rotate:true})
+    }
     _rotateFigure = ()=>{
         let isFigureMovable = this._isFigureMovable()
         if(isFigureMovable){
@@ -404,19 +408,19 @@ export class Tetris extends Component {
             <View style={styles.controllerContainer}>
             
                 <View style={styles.threeButtonContainer}>
-                    <TouchableOpacity style={styles.arrowButtons} onPress={()=>{this._moveLeft({keyCode:37})}}>
+                    <TouchableOpacity style={styles.arrowButtons} onPress={()=>{this._moveLeft()}}>
                         <Image
                             // style={styles.button}
                             source={(require('../assets/arrows/left-arrow-60.png'))}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.arrowButtons} onPress={()=>{this._rotateFigure()}}>
+                    <TouchableOpacity style={styles.arrowButtons} onPress={()=>{this._rotate()}}>
                         <Image
                             // style={styles.button}
                             source={(require('../assets/arrows/rotate-button-60.png'))}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.arrowButtons}  onPress={()=>{this._moveRight({keyCode:39})}}>
+                    <TouchableOpacity style={styles.arrowButtons}  onPress={()=>{this._moveRight()}}>
                         <Image
                             // style={styles.button}
                             source={(require('../assets/arrows/right-arrow-60.png'))}
@@ -481,8 +485,8 @@ const styles =StyleSheet.create({
     boardContainer:{
         position:'relative',
         zIndex:1,
-        width:wp('95%'),
-        height: hp("64%"),
+        width:wp('82%'),
+        height: hp("60%"),
         justifyContent:'center',
         alignItems:'center',
         marginLeft: 7,
