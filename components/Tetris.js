@@ -5,7 +5,7 @@ import {Figures} from '../assets/figures/Figures'
 import VideoScreen from './VideoScreen'
 import io from 'socket.io-client'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-
+import SoundPlayer from 'react-native-sound-player'
 
 export class Tetris extends Component {
     constructor(props){
@@ -37,9 +37,11 @@ export class Tetris extends Component {
         this.boardRef = React.createRef();
     }
     componentDidMount(){
+        SoundPlayer.loadSoundFile('chill', 'mp3')
+        SoundPlayer.play()
         const {userData, sessionID, player} =  this.props
         // this.socket = io("http://10.150.20.113:3000");
-        this.socket = io('http://10.150.21.157:3001');
+        this.socket = io('https://chatris.bugbyte.dev');
         this.socket.emit('game room setup', {userData, sessionID, player})
         this.socket.on('game room update', data =>{
 
@@ -360,9 +362,11 @@ export class Tetris extends Component {
                                     }
                 }
                 updatedBoard.unshift(newRow)
-                this.setState({score:this.state.score += 1})
+                this.setState({score:this.state.score += 1}, () => {
+                    this.socket.emit('game room update', {sessionID, player, score})
+
+                })
                 const {player, sessionID} = this.props
-                this.socket.emit('game room update', {sessionID, player, score})
             })
             this.setState({board:updatedBoard})
         }

@@ -15,9 +15,7 @@ export default class GameLobby extends Component {
 	}
 
 	componentDidMount() {
-		// this.socket = io("http://10.150.20.113:3000");
-		this.socket = io("http://10.150.21.157:3001");
-
+		this.socket = io("https://chatris.bugbyte.dev");
 		this.socket.emit("game lobby");
 		this.socket.on("game room update", data => {
 			return null;
