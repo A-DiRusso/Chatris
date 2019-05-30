@@ -33,14 +33,14 @@ export default class LoginScreen extends Component {
 
 		return (
 			<View style={styles.loginFormView}>
-				<Button
-					buttonStyle={styles.fbLoginButton}
-					title="Sign Up"
-					color="#3897f1"
-					onPress={this._changeScreen}
-				/>
 
 				<Text style={styles.logoText}>Chatris</Text>
+				<Button
+							
+							onPress={this._changeScreen}
+							title={'Already a user?'}
+						
+						></Button>
 				<TextInput
 					placeholder="First Name"
 					placeholderColor="#c4c3cb"
@@ -93,6 +93,13 @@ export default class LoginScreen extends Component {
 		return (
 			<View style={styles.loginFormView}>
 				<Text style={styles.logoText}>Chatris</Text>
+				<Button
+							onPress={this._changeScreen}
+							title={'new user? sign-up'}
+						
+							>
+							</Button>
+
 				<TextInput
 					placeholder="Email"
 					placeholderColor="#c4c3cb"
@@ -127,36 +134,18 @@ export default class LoginScreen extends Component {
 	};
 
 	render() {
-		const { firstName, lastName, userName, password } = this.state;
 		return (
 			<KeyboardAvoidingView
 				style={styles.containerView}
 				behavior="padding"
 			>
 				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+					
 					<View style={styles.loginScreenContainer}>
 						{this.state.signUp
 							? this._signUpScreen()
 							: this._loginScreen()}
 							
-							
-						{this.state.signUp ? 
-							
-							
-							<Button
-								onPress={this._changeScreen}
-								title={'Already a user?'}
-							
-							></Button>
-							:
-							<Button
-							onPress={this._changeScreen}
-							title={'new user? sign-up'}
-						
-							>
-							</Button>
-								
-						}
 							
 
 					</View>
